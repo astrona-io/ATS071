@@ -1,0 +1,95 @@
+# Preparation scaffold. Technical pages stay draft until authoring and review.
+training:
+  id: ATS071
+  title: 'CBA: Backstage Catalog'
+  description: Preparation scaffold for Backstage Catalog. Lessons and environments are planned.
+  certification:
+    name: Certified Backstage Associate
+    code: CBA
+    provider: CNCF / Linux Foundation
+    domain: Backstage Catalog
+    weight: 22
+    competencies:
+    - Understand how/why to use Backstage Catalog
+    - Populate Backstage Catalog
+    - Using annotations
+    - Working with manually registered entity locations
+    - Troubleshooting entity ingestion
+    - Working with automated ingestion
+modules:
+- id: module-intro
+  title: Introduction
+  description: Planned introduction and authoring status.
+  content:
+  - type: reading
+    title: Introduction
+    path: sections/intro/README.md
+  - type: reading
+    title: Welcome To The Course
+    path: sections/intro/course-01-welcome.md
+  - type: reading
+    title: Get Your Machine Ready
+    path: sections/intro/course-02-get-your-machine-ready.md
+  - type: reading
+    title: How This Course Is Made
+    path: sections/intro/course-03-how-this-course-is-made.md
+- id: module-010
+  title: Understand how/why to use Backstage Catalog
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-010/README.md
+  - type: reading
+    title: Understand how/why to use Backstage Catalog
+    path: sections/section-010/module-01/course.md
+- id: module-020
+  title: Populate Backstage Catalog
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-020/README.md
+  - type: reading
+    title: Populate Backstage Catalog
+    path: sections/section-020/module-01/course.md
+- id: module-030
+  title: Using annotations
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-030/README.md
+  - type: reading
+    title: Using annotations
+    path: sections/section-030/module-01/course.md
+- id: module-040
+  title: Working with manually registered entity locations
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-040/README.md
+  - type: reading
+    title: Working with manually registered entity locations
+    path: sections/section-040/module-01/course.md
+- id: module-050
+  title: Troubleshooting entity ingestion
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-050/README.md
+  - type: reading
+    title: Troubleshooting entity ingestion
+    path: sections/section-050/module-01/course.md
+- id: module-060
+  title: Working with automated ingestion
+  description: Planned coverage of this curriculum objective.
+  content:
+  - type: reading
+    title: Section Overview
+    path: sections/section-060/README.md
+  - type: reading
+    title: Working with automated ingestion
+    path: sections/section-060/module-01/course.md
