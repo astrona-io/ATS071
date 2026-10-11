@@ -1,0 +1,187 @@
+schema_version: 1
+kind: question_bank
+id: ats071-section-030
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: section
+  id: section-030
+  title: 'Checkpoint: Software Entities, Ownership And Discoverable Relationships, Descriptors, Entity
+    Policies And Catalog Population, Annotation Contracts And External Identity Mapping'
+placement:
+  position: after
+  reading: sections/section-030/module-01/course-02-summary.md
+questions:
+- id: ats071-section-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain the catalog as a model of software and organizational relationships.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: Which question is the catalog particularly suited to answer?
+  options:
+  - id: a
+    text: Who owns a component and how it relates to other entities?
+    explanation: That is structured software metadata.
+  - id: b
+    text: Which CPU instruction a process is executing right now?
+    explanation: That requires runtime profiling.
+  - id: c
+    text: Which browser owns an integration secret?
+    explanation: Secrets should not belong to browser metadata.
+  correct_option: a
+  explanation: That is structured software metadata.
+- id: ats071-section-030-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish entity identity from deployment identity.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: Which elements form a fully qualified entity reference?
+  options:
+  - id: a
+    text: Only the displayed title.
+    explanation: Titles need not establish unique identity.
+  - id: b
+    text: Only a transient Pod address.
+    explanation: Runtime addresses are not catalog identity.
+  - id: c
+    text: Kind, namespace and name.
+    explanation: Together they distinguish an entity.
+  correct_option: c
+  explanation: Together they distinguish an entity.
+- id: ats071-section-030-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Reason about ownership, freshness and catalog usefulness.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: A service has a valid Component entity. What remains unproven?
+  options:
+  - id: a
+    text: Whether a catalog can store software metadata.
+    explanation: That is the catalog's purpose.
+  - id: b
+    text: Its current runtime health and metadata freshness.
+    explanation: Catalog validity is narrower than operational truth.
+  - id: c
+    text: Whether it can have an owner reference at all.
+    explanation: Ownership is a supported relationship.
+  correct_option: b
+  explanation: Catalog validity is narrower than operational truth.
+- id: ats071-section-030-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Interpret the envelope and specification of a catalog descriptor.
+  source_readings:
+  - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+  prompt: Which descriptor fields identify the entity envelope?
+  options:
+  - id: a
+    text: apiVersion, kind and metadata.
+    explanation: They establish schema family, type and identity.
+  - id: b
+    text: Only a runtime container image tag.
+    explanation: A tag does not define a catalog entity.
+  - id: c
+    text: Only the current browser route.
+    explanation: Routes are presentation, not descriptors.
+  correct_option: a
+  explanation: They establish schema family, type and identity.
+- id: ats071-section-030-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain location registration and processing as separate steps.
+  source_readings:
+  - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+  prompt: What follows registering a remote descriptor location?
+  options:
+  - id: a
+    text: The live service is automatically deployed.
+    explanation: Catalog ingestion is not deployment.
+  - id: b
+    text: All database backups are automatically restored.
+    explanation: Registration does not recover application data.
+  - id: c
+    text: The catalog must fetch and process its contents.
+    explanation: A registered location is an input to ingestion.
+  correct_option: c
+  explanation: A registered location is an input to ingestion.
+- id: ats071-section-030-q06
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish accepted entity kinds from valid YAML syntax.
+  source_readings:
+  - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+  prompt: Why can valid YAML still fail catalog population?
+  options:
+  - id: a
+    text: Every valid YAML document is automatically a Component.
+    explanation: Entity envelopes and specifications remain required.
+  - id: b
+    text: It may violate the entity policy or kind-specific contract.
+    explanation: Syntax validity is only the first boundary.
+  - id: c
+    text: YAML cannot express any metadata.
+    explanation: Metadata is a normal YAML structure.
+  correct_option: b
+  explanation: Syntax validity is only the first boundary.
+- id: ats071-section-030-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish annotations from labels and core specification fields.
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  prompt: What gives an annotation its operational meaning?
+  options:
+  - id: a
+    text: The plugin or processor that consumes its named contract.
+    explanation: A key alone does not implement behavior.
+  - id: b
+    text: The number of characters in its display title.
+    explanation: Title length does not define integration semantics.
+  - id: c
+    text: Automatic administrator authority.
+    explanation: Annotations do not grant permissions.
+  correct_option: a
+  explanation: A key alone does not implement behavior.
+- id: ats071-section-030-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain how a plugin interprets an annotation value.
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  prompt: Which value is appropriate for an integration annotation?
+  options:
+  - id: a
+    text: A production API token.
+    explanation: Credentials belong in protected server configuration.
+  - id: b
+    text: An arbitrary description unrelated to the consumer.
+    explanation: The value must satisfy the consumer's contract.
+  - id: c
+    text: The supported external identifier for the intended entity.
+    explanation: It establishes the metadata join.
+  correct_option: c
+  explanation: It establishes the metadata join.
+- id: ats071-section-030-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Diagnose incorrect integration mappings without treating metadata as permission.
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  prompt: A card returns valid information for the wrong build project. What should be checked first?
+  options:
+  - id: a
+    text: Whether all API permissions should be removed forever.
+    explanation: That does not identify the mistaken mapping.
+  - id: b
+    text: The entity's annotation and external identity mapping.
+    explanation: A wrong join can succeed technically.
+  - id: c
+    text: Whether the browser has more CPU.
+    explanation: CPU capacity does not correct identity.
+  correct_option: b
+  explanation: A wrong join can succeed technically.

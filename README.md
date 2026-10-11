@@ -1,18 +1,20 @@
-# ATS071 — CBA: Backstage Catalog
+# Backstage Catalog (ATS071)
 
-Preparation for the **Backstage Catalog** domain of **Certified Backstage Associate (CBA)**.
-The published domain weight is **22%**. This repository belongs to
-the [ATP014 training path](https://github.com/astrona-io/ATP014).
+Certified Backstage Associate (CBA): Backstage Catalog, worth 22% of the official curriculum. This course belongs to ATP014.
 
-**Status:** Preparation scaffold; content authoring has not started.
+Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction and every module closes with a summary. Reusable YAML checks contain 5–15 questions per bank. Technical content remains draft. No labs or playgrounds are included.
 
-The initial commit reserves the curriculum structure. Lessons, playgrounds,
-labs and assessments are planned and are not ready for learner use.
+## Course Outline
 
-See [CURRICULUM.md](CURRICULUM.md) for the objective map and authoring checklist,
-[astrona.yaml](astrona.yaml) for the course manifest, and
-[CLAUDE.md](CLAUDE.md) for writing and environment rules.
+| Section / module | Module | Teaching files |
+| --- | --- | --- |
+| 010 / 01 | Software Entities, Ownership And Discoverable Relationships | Software Entities, Ownership And Discoverable Relationships |
+| 020 / 01 | Descriptors, Entity Policies And Catalog Population | Descriptors, Entity Policies And Catalog Population |
+| 030 / 01 | Annotation Contracts And External Identity Mapping | Annotation Contracts And External Identity Mapping |
+| 040 / 01 | Registered Locations, Source Access And Entity Lifecycle | Registered Locations, Source Access And Entity Lifecycle |
+| 050 / 01 | Fetching, Processing, Stitching And Publication Evidence | Fetching, Processing, Stitching And Publication Evidence |
+| 060 / 01 | Entity Providers, Discovery Scope And Repeatable Ingestion | Entity Providers, Discovery Scope And Repeatable Ingestion |
 
-Curriculum source: [official CBA page](https://training.linuxfoundation.org/certification/certified-backstage-associate-cba/), checked 2026-10-10.
-License: [Apache-2.0](LICENSE). Curriculum objectives retain attribution to
-The Linux Foundation and CNCF; see [CNCF curriculum licensing](https://github.com/cncf/curriculum).
+## Author Review
+
+See [curriculum coverage](CURRICULUM.md), [primary sources](SOURCES.md), [question-bank documentation](ASSESSMENTS.md) and [contribution instructions](CONTRIBUTING.md). No runtime execution is claimed.
