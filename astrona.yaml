@@ -37,7 +37,7 @@ modules:
 - id: module-010
   title: Understand how/why to use Backstage Catalog
   description: Developed reading and reasoning for Understand how/why to use Backstage Catalog.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Understand how/why to use Backstage Catalog
@@ -54,7 +54,7 @@ modules:
 - id: module-020
   title: Populate Backstage Catalog
   description: Developed reading and reasoning for Populate Backstage Catalog.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Populate Backstage Catalog
@@ -71,7 +71,7 @@ modules:
 - id: module-030
   title: Using annotations
   description: Developed reading and reasoning for Using annotations.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Using annotations
@@ -88,7 +88,7 @@ modules:
 - id: module-040
   title: Working with manually registered entity locations
   description: Developed reading and reasoning for Working with manually registered entity locations.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Working with manually registered entity locations
@@ -105,7 +105,7 @@ modules:
 - id: module-050
   title: Troubleshooting entity ingestion
   description: Developed reading and reasoning for Troubleshooting entity ingestion.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Troubleshooting entity ingestion
@@ -122,7 +122,7 @@ modules:
 - id: module-060
   title: Working with automated ingestion
   description: Developed reading and reasoning for Working with automated ingestion.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Working with automated ingestion
