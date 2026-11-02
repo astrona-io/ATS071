@@ -1,0 +1,186 @@
+schema_version: 1
+kind: question_bank
+id: ats071-domain-review
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: domain
+  id: domain-review
+  title: Backstage Catalog
+placement:
+  position: after
+  reading: sections/section-060/module-01/course-02-summary.md
+questions:
+- id: ats071-domain-review-q01
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain a manually registered location as an ingestion input.
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: What is the primary effect of registering a descriptor location?
+  options:
+  - id: a
+    text: It supplies an input source for catalog ingestion.
+    explanation: The catalog still has to fetch and process it.
+  - id: b
+    text: It deploys the described service immediately.
+    explanation: Catalog registration is not deployment.
+  - id: c
+    text: It grants the source repository administrator access.
+    explanation: Registration does not change external permissions.
+  correct_option: a
+  explanation: The catalog still has to fetch and process it.
+- id: ats071-domain-review-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish location removal from entity lifecycle and rediscovery.
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: Why might a deleted entity reappear?
+  options:
+  - id: a
+    text: Because deleting any entity automatically creates two copies.
+    explanation: There is no universal duplication rule.
+  - id: b
+    text: Because a browser title permanently prevents deletion.
+    explanation: Titles do not control source ingestion.
+  - id: c
+    text: An active source can discover and publish it again.
+    explanation: The source lifecycle remains authoritative.
+  correct_option: c
+  explanation: The source lifecycle remains authoritative.
+- id: ats071-domain-review-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose registration, fetch and processing failures separately.
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: A location is accepted but the backend cannot read its private source. Which boundary failed?
+  options:
+  - id: a
+    text: The frontend component's color theme.
+    explanation: A theme does not grant repository access.
+  - id: b
+    text: Source integration access.
+    explanation: Registration did not prove authorized fetching.
+  - id: c
+    text: The running service's scheduler placement.
+    explanation: Scheduling is unrelated to reading the descriptor.
+  correct_option: b
+  explanation: Registration did not prove authorized fetching.
+- id: ats071-domain-review-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Trace the catalog ingestion stages and their distinct outputs.
+  source_readings:
+  - sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
+  prompt: Which observation most directly supports a source-fetch failure?
+  options:
+  - id: a
+    text: The backend cannot read the registered descriptor source.
+    explanation: The failure occurs before entity interpretation.
+  - id: b
+    text: The service has a low business conversion rate.
+    explanation: That is not catalog-fetch evidence.
+  - id: c
+    text: A card uses a different heading size.
+    explanation: Heading size is presentation.
+  correct_option: a
+  explanation: The failure occurs before entity interpretation.
+- id: ats071-domain-review-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Locate malformed data, source access and identity conflicts.
+  source_readings:
+  - sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
+  prompt: Two providers claim the same canonical entity. What should be reviewed?
+  options:
+  - id: a
+    text: Only the browser zoom setting.
+    explanation: Zoom cannot reconcile source ownership.
+  - id: b
+    text: Whether every entity should share one name.
+    explanation: Shared names would worsen ambiguity.
+  - id: c
+    text: Source ownership and identity conflict.
+    explanation: Ingestion needs a coherent owner for the entity.
+  correct_option: c
+  explanation: Ingestion needs a coherent owner for the entity.
+- id: ats071-domain-review-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain processing errors without confusing them with service outages.
+  source_readings:
+  - sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
+  prompt: What does an entity processing error establish?
+  options:
+  - id: a
+    text: Every other catalog entity is invalid.
+    explanation: The error can be specific to one input.
+  - id: b
+    text: A failure in the catalog metadata pipeline.
+    explanation: It identifies ingestion evidence.
+  - id: c
+    text: The represented application is necessarily down.
+    explanation: The application's runtime is separate.
+  correct_option: b
+  explanation: It identifies ingestion evidence.
+- id: ats071-domain-review-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain entity providers and processors as distinct ingestion roles.
+  source_readings:
+  - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+  prompt: What responsibility characterizes an entity provider?
+  options:
+  - id: a
+    text: Supplying and maintaining a defined set of entity inputs.
+    explanation: It establishes a discovery source and ownership boundary.
+  - id: b
+    text: Rendering every browser card.
+    explanation: Rendering is frontend behavior.
+  - id: c
+    text: Replacing every catalog processor.
+    explanation: Processors still interpret and enrich inputs.
+  correct_option: a
+  explanation: It establishes a discovery source and ownership boundary.
+- id: ats071-domain-review-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Reason about scheduling, full and incremental updates.
+  source_readings:
+  - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+  prompt: Why must a full update have a well-defined scope?
+  options:
+  - id: a
+    text: A full update automatically discovers all private repositories.
+    explanation: Access and filters still constrain discovery.
+  - id: b
+    text: The provider's scope is always one browser session.
+    explanation: Provider work is server-side.
+  - id: c
+    text: Omission can be interpreted as removal within the provider's owned set.
+    explanation: Incomplete discovery can change lifecycle results.
+  correct_option: c
+  explanation: Incomplete discovery can change lifecycle results.
+- id: ats071-domain-review-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify ownership, filtering and credential risks in automated discovery.
+  source_readings:
+  - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+  prompt: What can broad discovery with an overprivileged token cause?
+  options:
+  - id: a
+    text: Automatic removal of all stale code from source hosts.
+    explanation: Catalog ingestion does not delete software code.
+  - id: b
+    text: Excessive access and unintended metadata exposure.
+    explanation: Scope and credential authority need constraints.
+  - id: c
+    text: Guaranteed accurate ownership for every service.
+    explanation: Discovery does not prove semantic accuracy.
+  correct_option: b
+  explanation: Scope and credential authority need constraints.
