@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix Catalog Annotations (LAB). Graded against the live cluster. Fix annotations that sit in the wrong place, hold the wrong value or should not exist.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-030-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: bridge-techdocs
+      description: The bridge Component carries techdocs-ref as an annotation
+      type: file
+      source: validation/validate-bridge-techdocs.sh
+      hint: Annotations and labels follow different rules. Check which map holds the key and what the label rules allow.
+    - name: scout-project-slug
+      description: The scout Component points at its own GitHub repository
+      type: file
+      source: validation/validate-scout-project-slug.sh
+      hint: The value names an owner and a repository. Compare it with the repository that holds the scout descriptor.
+    - name: scout-kubernetes
+      description: The scout Component maps to its own Kubernetes workloads
+      type: file
+      source: validation/validate-scout-kubernetes.sh
+      hint: Two annotations carry the Kubernetes mapping. Both must name scout, not another component.
+    - name: shuttle-valid-annotations
+      description: The shuttle Component is ingested and keeps its pager annotation as a string
+      type: file
+      source: validation/validate-shuttle-valid-annotations.sh
+      hint: Read the policy error in the inspector report. Annotation values must be strings.
+    - name: shuttle-no-secret
+      description: No annotation on the shuttle Component holds a token
+      type: file
+      source: validation/validate-shuttle-no-secret.sh
+      hint: Annotations are visible catalog metadata. A credential does not belong in them.
+    - name: estate-intact
+      description: Nothing was deleted and the correct annotations were kept (guard)
+      type: file
+      source: validation/validate-estate-intact.sh
+      hint: Edit the files in place. Do not delete a repository ConfigMap or change annotations that are already correct.
+
+teardown:
+  keepCluster: false

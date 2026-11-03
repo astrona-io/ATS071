@@ -203,20 +203,37 @@ The course covers **Backstage Catalog**, worth **22%** of
 **Certified Backstage Associate (CBA)**. It is part of **ATP014**.
 The official objectives are listed in `astrona.yaml` and mapped in `CURRICULUM.md`.
 
-### Reading-only scope
+### Hands-on scope
 
-The maintainer approved the lesson plan, asked for deeper teaching, and explicitly
-requested **no labs or playgrounds**. That instruction overrides shared examples
-about hands-on environments, graded labs and playground markers. Do not create
-runtime configurations, executable exercises or playground lifecycle markers.
-The course must be usable without a cluster or installed command-line tools.
+The maintainer first asked for a reading-only course and has since lifted that
+limit (2026-11-03). Labs, playgrounds, capstones and `quiz.yaml` files are now
+in scope and follow the shared rules above. Each module has a playground and a
+graded lab, each section has a capstone lab and a `quiz.yaml`, and the course
+has a `sections/final-domain-quiz.yaml`.
+
+The environment is a kind cluster. The Backstage application is not run. The
+descriptor "repositories" are ConfigMaps named `repo-<name>` in the namespace
+`catalog-source`, and the catalog configuration is the ConfigMap
+`catalog-config` (key `app-config.yaml`). A pod in `catalog-tools` runs
+`tools/inspect.js`. The script validates every document with the real
+`@backstage/catalog-model` library (entity policies and kind validators) and
+models locations, `catalog.rules`, relations and GitHub discovery providers.
+Say this plainly in labs and playground guides: it is a model of the catalog
+backend, not the Backstage backend. Every lab and playground carries its own
+copy of `tools/inspect.js`; keep the copies identical.
+
+Labs and playgrounds are built from static checks only (`astrona validate -c`,
+`bash -n`, YAML parsing, a local run of `inspect.js` and a `kubectl` shim for
+the validation scripts). They are UNTESTED on a real cluster until a maintainer
+runs them. The older reading-only question banks under `assessments/` were
+replaced by `quiz.yaml` files.
 
 ### Teaching structure and depth
 
 Every section begins with its own introduction and measurable learning outcomes.
 Every module contains a landing page, developed teaching lessons and a final
 `# Summary` page. Put the summary after all its lessons and before the next
-module. This reading-only summary has no playground destruction marker.
+module. The summary ends with `<!-- astrona:playground:destroy -->`.
 
 Explain mechanisms, responsible components, realistic examples and the limits
 of each claim. Include worked reasoning and relevant failure cases. Avoid thin
@@ -224,19 +241,14 @@ outlines, repetitive filler and invented command output. Split broad topics when
 needed; do not force a fixed number of lessons. The shared plain-English,
 self-contained-page and Mermaid rules apply throughout.
 
-### Reusable question data
+### Quizzes
 
-Write original single-choice questions as YAML banks under section folders and
-`assessments/`. Use the versioned contract in `schemas/question-bank.schema.json`
-and teaching order in `assessments/index.yaml`. Each bank has 5–15 questions with
-stable IDs, one correct option, per-option feedback, a measurable learning
-objective and source reading paths for author traceability.
-
-Do not register YAML as a Markdown reading. A future renderer consumes the bank
-index and presents the checkpoint after its declared reading, preserving bank
-order when several share an anchor. Do not expose answer keys before submission
-in a production quiz interface. These public banks are practice material, not
-secure or official exam questions.
+Each section has a `quiz.yaml` (`kind: question_bank`, single-choice, one
+correct option, an explanation for every option, a measurable learning
+objective and source reading paths). It is listed in `astrona.yaml` as a
+`type: quiz` entry with `pass_score: 70`, after the capstone lab. The course
+ends with `sections/final-domain-quiz.yaml`. The questions are original
+practice material, not official exam items. Model: `../ATS021/sections/section-010/quiz.yaml`.
 
 ### Review and authoring checks
 
@@ -247,5 +259,6 @@ The ATP registration remains draft until publication is approved.
 
 Primary author sources are recorded in `SOURCES.md`. The objective list was
 verified on 2026-10-11. Detailed reading expansions were written on 2026-10-11.
-Validate manifest paths, summary ordering, curriculum coverage and question
-contracts. Do not claim runtime verification for a reading-only course.
+Validate manifest paths, summary ordering, curriculum coverage, quiz files and
+every lab and playground with `astrona validate -c`. Do not claim runtime
+verification until a maintainer has run the labs.

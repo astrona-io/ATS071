@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Repair A Broken Catalog Estate (LAB). Graded against the live cluster. Seven faults across rules, relative locations, validation, relations and conflicts.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-050
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: org-kinds-allowed
+      description: The group outpost-ops is ingested
+      type: file
+      source: validation/validate-org-kinds-allowed.sh
+      hint: Read the rules error for the group. Compare the kinds that catalog.rules allows with the kinds in the organization files.
+    - name: drifters-group-valid
+      description: The group drifters is valid and ingested
+      type: file
+      source: validation/validate-drifters-group-valid.sh
+      hint: The kind error names a property of the Group spec. Read what the Group schema requires.
+    - name: users-location-reachable
+      description: The user kira is ingested through the Location entity
+      type: file
+      source: validation/validate-users-location-reachable.sh
+      hint: A Location entity lists targets. Check the fetch error and compare the target with the files in the repository.
+    - name: sensor-registered
+      description: The sensor Component is read and ingested
+      type: file
+      source: validation/validate-sensor-registered.sh
+      hint: Look at the status of the sensor location. Compare its type and target with the locations that work.
+    - name: beacon-dependency-resolves
+      description: The beacon Component is ingested and its relations resolve
+      type: file
+      source: validation/validate-beacon-dependency-resolves.sh
+      hint: The relations error says what is missing from a reference. Read the exact message.
+    - name: relay-valid
+      description: The relay Component is ingested
+      type: file
+      source: validation/validate-relay-valid.sh
+      hint: The policy error names the field and the rule it breaks. The value, not the key, is the problem.
+    - name: api-single-owner
+      description: Every API reference has one location and relay keeps its own API
+      type: file
+      source: validation/validate-api-single-owner.sh
+      hint: Check the conflicts list. The relay repository must describe an API of its own, and the Component must point at it.
+    - name: nothing-deleted
+      description: All repositories, the rules and the existing entities are still in place
+      type: file
+      source: validation/validate-nothing-deleted.sh
+      hint: Edit descriptors and configuration. Do not delete repositories, locations or entities, and do not remove catalog.rules.
+
+teardown:
+  keepCluster: false

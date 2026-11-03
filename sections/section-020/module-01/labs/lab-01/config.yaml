@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix Invalid Catalog Descriptors (LAB). Graded against the live cluster. Five repositories hold descriptors that the catalog rejects. Find each fault in the report and fix the descriptors.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-020-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: org-groups-valid
+      description: "The group starfleet-ops is accepted and its members resolve"
+      type: file
+      source: validation/validate-org-groups-valid.sh
+      hint: "A Group needs more than a type. Read the kind-stage error for the starfleet-ops document."
+    - name: telemetry-accepted
+      description: "The telemetry Component is accepted as probe-telemetry"
+      type: file
+      source: validation/validate-telemetry-accepted.sh
+      hint: "The policy stage names the rule the name breaks. The entity must keep its purpose and get a valid name."
+    - name: relay-has-lifecycle
+      description: "The relay Component is accepted with lifecycle production"
+      type: file
+      source: validation/validate-relay-has-lifecycle.sh
+      hint: "Compare the spec of relay with the required fields of a Component."
+    - name: cargo-entities-accepted
+      description: "The cargo Component and the cargo-api API are accepted and the API reference resolves"
+      type: file
+      source: validation/validate-cargo-entities-accepted.sh
+      hint: "There are two different faults in this one file, in two documents. Read both errors and their stages."
+    - name: scanner-parses
+      description: "The scanner file parses and the Component is accepted"
+      type: file
+      source: validation/validate-scanner-parses.sh
+      hint: "A parse error has no entity name. Look at the indentation of the lines that the error points to."
+    - name: catalog-intact
+      description: "No repository or location was removed and the rules were not changed"
+      type: file
+      source: validation/validate-catalog-intact.sh
+      hint: "Fix the descriptors, not the catalog configuration. Keep every repository and every location."
+
+teardown:
+  keepCluster: false

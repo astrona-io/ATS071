@@ -1,9 +1,10 @@
-# Reading-only content; YAML knowledge checks have a separate index.
+# Hands-on course: readings, playgrounds, labs, capstones and quizzes (labs UNTESTED).
 training:
   id: ATS071
   title: 'CBA: Backstage Catalog'
-  description: 'Detailed reading material and reusable YAML knowledge checks for CBA: Backstage Catalog.
-    Technical content remains draft. No labs or playgrounds.'
+  description: 'Reading material, playgrounds, graded labs, capstones and quizzes
+    for CBA: Backstage Catalog. Labs model the catalog backend in a kind cluster and
+    are untested on a real cluster. Technical content remains draft.'
   certification:
     name: Certified Backstage Associate
     code: CBA
@@ -36,8 +37,9 @@ modules:
     path: sections/intro/course-03-how-this-course-is-made.md
 - id: module-010
   title: Understand how/why to use Backstage Catalog
-  description: Developed reading and reasoning for Understand how/why to use Backstage Catalog.
-  maturity: alpha
+  description: Entities, kinds, references, ownership, relations, source of truth
+    and freshness, with a playground, a lab and a capstone.
+  status: alpha
   content:
   - type: reading
     title: Understand how/why to use Backstage Catalog
@@ -46,15 +48,66 @@ modules:
     title: Software Entities, Ownership And Discoverable Relationships
     path: sections/section-010/module-01/course.md
   - type: reading
-    title: Software Entities, Ownership And Discoverable Relationships
+    title: Entities, Kinds And Entity References
     path: sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
   - type: reading
+    title: Ownership And Relationships
+    path: sections/section-010/module-01/course-02-ownership-and-relationships.md
+  - type: reading
+    title: Question
+    path: sections/section-010/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Fix Ownership And Relations
+    path: sections/section-010/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: catalog-modeling
+    task_kind: troubleshooting
+    tags:
+    - entities
+    - ownership
+    - relations
+    - unresolved-references
+    learning_goals:
+    - Point an owner at a Group that exists
+    - Write dependsOn references with a kind
+    - Make system and API references resolve
+  - type: reading
+    title: Source Of Truth, Freshness And Adoption
+    path: sections/section-010/module-01/course-03-source-of-truth-freshness-and-adoption.md
+  - type: reading
     title: Summary
-    path: sections/section-010/module-01/course-02-summary.md
+    path: sections/section-010/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-010/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Model The Shipyard Estate Capstone
+    path: sections/section-010/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: catalog-modeling
+    task_kind: build
+    tags:
+    - system
+    - domain
+    - api
+    - resource
+    - relations
+    learning_goals:
+    - Create a Domain, a System, an API and a Resource
+    - Connect components with system, providesApis, consumesApis and dependsOn
+    - Finish with zero errors and no unresolved relations
+  - type: quiz
+    title: 'Knowledge Check: Understand how/why to use Backstage Catalog'
+    path: sections/section-010/quiz.yaml
+    pass_score: 70
 - id: module-020
   title: Populate Backstage Catalog
-  description: Developed reading and reasoning for Populate Backstage Catalog.
-  maturity: alpha
+  description: Descriptor envelope, entity policies, required fields, multi-document
+    files, catalog rules and location registration, with a playground, a lab, a capstone
+    and a quiz.
+  status: alpha
   content:
   - type: reading
     title: Populate Backstage Catalog
@@ -63,15 +116,68 @@ modules:
     title: Descriptors, Entity Policies And Catalog Population
     path: sections/section-020/module-01/course.md
   - type: reading
-    title: Descriptors, Entity Policies And Catalog Population
+    title: Descriptor Envelope, Names And Entity Policies
     path: sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
   - type: reading
+    title: Kinds, Required Fields And Multi-Document Files
+    path: sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+  - type: reading
+    title: Question
+    path: sections/section-020/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Fix Invalid Catalog Descriptors
+    path: sections/section-020/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: catalog-population
+    task_kind: troubleshooting
+    tags:
+    - backstage
+    - catalog
+    - descriptor
+    - entity-policy
+    - required-fields
+    - yaml
+    learning_goals:
+    - Fix an invalid metadata.name and a missing required spec field
+    - Remove a foreign root field and add a missing API definition
+    - Repair a YAML indentation error and keep every repository and location
+  - type: reading
+    title: Catalog Rules And Registering Locations
+    path: sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+  - type: reading
     title: Summary
-    path: sections/section-020/module-01/course-02-summary.md
+    path: sections/section-020/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-020/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Descriptors, Rules And Locations Capstone
+    path: sections/section-020/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: catalog-population
+    task_kind: configuration
+    tags:
+    - backstage
+    - catalog
+    - catalog-rules
+    - locations
+    - location-entity
+    - descriptor
+    learning_goals:
+    - Replace restrictive catalog.rules without losing the allowed kinds
+    - Allow Group and User for one organization location only
+    - Register a repository and follow a Location entity to a second file
+  - type: quiz
+    title: 'Knowledge Check: Populate Backstage Catalog'
+    path: sections/section-020/quiz.yaml
+    pass_score: 70
 - id: module-030
   title: Using annotations
-  description: Developed reading and reasoning for Using annotations.
-  maturity: alpha
+  description: Annotations, labels and spec fields, well-known annotation keys, external
+    identity mapping and why annotations are not permissions.
+  status: alpha
   content:
   - type: reading
     title: Using annotations
@@ -83,12 +189,67 @@ modules:
     title: Annotation Contracts And External Identity Mapping
     path: sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
   - type: reading
+    title: Annotations, Labels, Tags And Spec Fields
+    path: sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+  - type: reading
+    title: Well-Known Annotations And Who Sets Them
+    path: sections/section-030/module-01/course-03-well-known-annotations.md
+  - type: reading
+    title: Question
+    path: sections/section-030/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Fix Catalog Annotations
+    path: sections/section-030/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: catalog-annotations
+    task_kind: troubleshooting
+    tags:
+    - backstage
+    - catalog
+    - annotations
+    - labels
+    - techdocs-ref
+    - project-slug
+    - kubernetes-id
+    learning_goals:
+    - Move a locator from labels to annotations
+    - Correct annotation values that name another component
+    - Quote a non-string annotation value and remove a credential
+  - type: reading
     title: Summary
-    path: sections/section-030/module-01/course-02-summary.md
+    path: sections/section-030/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-030/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Annotations Capstone
+    path: sections/section-030/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: catalog-annotations
+    task_kind: troubleshooting
+    tags:
+    - backstage
+    - catalog
+    - annotations
+    - source-location
+    - view-url
+    - project-slug
+    - spec
+    learning_goals:
+    - Repair an invalid annotation key and remove a password
+    - Fix a slug format and location-reference values
+    - Replace copied identities and move a required value into spec
+  - type: quiz
+    title: 'Knowledge Check: Using annotations'
+    path: sections/section-030/quiz.yaml
+    pass_score: 70
 - id: module-040
   title: Working with manually registered entity locations
-  description: Developed reading and reasoning for Working with manually registered entity locations.
-  maturity: alpha
+  description: Static and interface registration, Location entities, rules, source
+    access and entity lifecycle, with a playground, a lab and a capstone.
+  status: alpha
   content:
   - type: reading
     title: Working with manually registered entity locations
@@ -97,15 +258,66 @@ modules:
     title: Registered Locations, Source Access And Entity Lifecycle
     path: sections/section-040/module-01/course.md
   - type: reading
-    title: Registered Locations, Source Access And Entity Lifecycle
+    title: Registering Locations And Source Access
     path: sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
   - type: reading
+    title: Location Entities, Rules And Removing A Registration
+    path: sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+  - type: reading
+    title: Question
+    path: sections/section-040/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Fix Registered Locations Lab
+    path: sections/section-040/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: catalog-locations
+    task_kind: troubleshooting
+    tags:
+    - catalog.locations
+    - location-entity
+    - rules
+    - branch
+    - retirement
+    learning_goals:
+    - Fix a location target that uses the wrong branch
+    - Allow Group and User on one location without a global rules key
+    - Fix a mistyped Location entity target and retire a registration without deleting
+      its source
+  - type: reading
+    title: Entity Lifecycle, Orphans, Rediscovery And Conflicts
+    path: sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+  - type: reading
     title: Summary
-    path: sections/section-040/module-01/course-02-summary.md
+    path: sections/section-040/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-040/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Register An Estate Capstone
+    path: sections/section-040/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: catalog-locations
+    task_kind: build
+    tags:
+    - catalog.locations
+    - location-entity
+    - catalog.rules
+    - conflicts
+    - retirement
+    learning_goals:
+    - Register a root Location and reach the tree through Location entities
+    - Repair a global catalog.rules list without dropping the default kinds
+    - Remove a duplicate declaration and retire a component at its source
+  - type: quiz
+    title: 'Knowledge Check: Manually Registered Entity Locations'
+    path: sections/section-040/quiz.yaml
+    pass_score: 70
 - id: module-050
   title: Troubleshooting entity ingestion
   description: Developed reading and reasoning for Troubleshooting entity ingestion.
-  maturity: alpha
+  status: alpha
   content:
   - type: reading
     title: Troubleshooting entity ingestion
@@ -117,12 +329,68 @@ modules:
     title: Fetching, Processing, Stitching And Publication Evidence
     path: sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
   - type: reading
+    title: Fetch And Parse Failures
+    path: sections/section-050/module-01/course-02-fetch-and-parse-failures.md
+  - type: reading
+    title: Validation, Rules, Conflicts And Unresolved Relations
+    path: sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  - type: reading
+    title: Question
+    path: sections/section-050/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Find And Fix Five Ingestion Faults
+    path: sections/section-050/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: catalog-ingestion
+    task_kind: troubleshooting
+    tags:
+    - ingestion
+    - locations
+    - yaml
+    - entity-policy
+    - catalog-rules
+    - conflicts
+    - relations
+    learning_goals:
+    - Tell a fetch failure from a parse failure and repair each at its source
+    - Fix a name that breaks the entity policy and a kind that the rules refuse
+    - Resolve an identity conflict without deleting entities
+  - type: reading
     title: Summary
-    path: sections/section-050/module-01/course-02-summary.md
+    path: sections/section-050/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-050/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Repair A Broken Catalog Estate
+    path: sections/section-050/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 35m
+    topic: catalog-ingestion
+    task_kind: troubleshooting
+    tags:
+    - ingestion
+    - location-entity
+    - relative-targets
+    - catalog-rules
+    - group-schema
+    - relations
+    - conflicts
+    learning_goals:
+    - Read evidence from every ingestion stage and group the faults by stage
+    - Repair rules, a relative Location target, a Group schema error and a relation
+      reference
+    - Resolve an API identity conflict and replace an unsupported location type
+  - type: quiz
+    title: 'Knowledge Check: Troubleshooting entity ingestion'
+    path: sections/section-050/quiz.yaml
+    pass_score: 70
 - id: module-060
   title: Working with automated ingestion
-  description: Developed reading and reasoning for Working with automated ingestion.
-  maturity: alpha
+  description: Entity providers, GitHub discovery filters, schedules, full and delta
+    updates and duplicate sources, with a playground, a lab and a capstone.
+  status: alpha
   content:
   - type: reading
     title: Working with automated ingestion
@@ -131,8 +399,69 @@ modules:
     title: Entity Providers, Discovery Scope And Repeatable Ingestion
     path: sections/section-060/module-01/course.md
   - type: reading
-    title: Entity Providers, Discovery Scope And Repeatable Ingestion
+    title: Entity Providers And GitHub Discovery
     path: sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
   - type: reading
+    title: Discovery Filters, Scope And Credentials
+    path: sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+  - type: reading
+    title: Question
+    path: sections/section-060/module-01/labs/lab-01/question.md
+  - type: lab
+    title: Fix GitHub Discovery Filters
+    path: sections/section-060/module-01/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 20m
+    topic: automated-ingestion
+    task_kind: configuration
+    tags:
+    - github-discovery
+    - entity-provider
+    - filters
+    - catalogPath
+    - schedule
+    - visibility
+    learning_goals:
+    - Fix the branch and catalogPath of a GitHub discovery provider
+    - Use topic and visibility filters to set the discovery scope
+    - Set a schedule with a safe frequency and a timeout
+  - type: reading
+    title: Schedules, Updates And Overlapping Sources
+    path: sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+  - type: reading
     title: Summary
-    path: sections/section-060/module-01/course-02-summary.md
+    path: sections/section-060/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-060/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Automated Ingestion Capstone
+    path: sections/section-060/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: automated-ingestion
+    task_kind: migration
+    tags:
+    - github-discovery
+    - entity-provider
+    - catalog-rules
+    - conflicts
+    - static-location
+    - schedule
+    learning_goals:
+    - Repair provider filters so the right repositories are discovered
+    - Allow the Group and User kinds and resolve ownership
+    - Remove a duplicate static location that conflicts with the provider
+  - type: quiz
+    title: 'Knowledge Check: Automated Ingestion'
+    path: sections/section-060/quiz.yaml
+    pass_score: 70
+- id: module-final
+  title: Final Domain Quiz
+  description: Domain review across all six sections.
+  status: alpha
+  content:
+  - type: quiz
+    title: 'Final Domain Quiz: Backstage Catalog'
+    path: sections/final-domain-quiz.yaml
+    pass_score: 70

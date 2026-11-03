@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix Registered Locations (LAB). Graded against the live cluster. Four registration faults: a wrong branch, a blocked kind, a mistyped Location target and a retired repository.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-040-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: scout-ingested
+      description: "The scout Component is registered and ingested"
+      type: file
+      source: validation/validate-scout-ingested.sh
+      hint: "Read the status of the scout location in the report. Compare its branch with the default branch of the repository."
+    - name: org-entities-ingested
+      description: "The groups and the user of the organization file are ingested"
+      type: file
+      source: validation/validate-org-entities-ingested.sh
+      hint: "The kinds that a location may contain are controlled by rules. Limit the change to the location that needs it."
+    - name: global-rules-unchanged
+      description: "The global catalog rules were not widened"
+      type: file
+      source: validation/validate-global-rules-unchanged.sh
+      hint: "Do not add catalog.rules. A rule on the one location is enough."
+    - name: fleet-components-ingested
+      description: "Both fleet components are ingested through the Location entity"
+      type: file
+      source: validation/validate-fleet-components-ingested.sh
+      hint: "A Location entity resolves relative targets from its own file. Read the status of each target."
+    - name: probe-retired
+      description: "The probe is no longer registered and its repository still exists"
+      type: file
+      source: validation/validate-probe-retired.sh
+      hint: "Retire software by removing its registration. The repository is not yours to delete."
+    - name: no-fetch-errors
+      description: "No location fails to fetch"
+      type: file
+      source: validation/validate-no-fetch-errors.sh
+      hint: "List the errors with the stage fetch and read the target of each one."
+    - name: bridge-untouched
+      description: "The bridge Component is still ingested and no repository was deleted"
+      type: file
+      source: validation/validate-bridge-untouched.sh
+      hint: "This check passes at the start. Keep the other locations and repositories as they are."
+
+teardown:
+  keepCluster: false

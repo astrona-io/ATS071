@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix GitHub Discovery Filters (LAB). Graded against the live cluster. Repair a GitHub discovery provider so it finds the right repositories.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-060-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: provider-locations-resolve
+      description: "The provider produces at least three locations and every one of them is found"
+      type: file
+      source: validation/validate-provider-locations-resolve.sh
+      hint: "A provider builds each location from the repository name, the branch and the catalog path. Check that the branch and the file name match what the repositories really contain."
+    - name: public-services-ingested
+      description: "The public repositories scout and shuttle are ingested through the provider"
+      type: file
+      source: validation/validate-public-services-ingested.sh
+      hint: "Look at which repositories the filters let through. A filter that is too narrow hides repositories that should be found."
+    - name: experiment-excluded
+      description: "The experimental probe repository is not ingested while other services are"
+      type: file
+      source: validation/validate-experiment-excluded.sh
+      hint: "Repositories carry topics. Exclude the topic that marks experiments and keep the topic that marks catalog repositories."
+    - name: private-repo-not-discovered
+      description: "The internal bridge is discovered and the private vault is not"
+      type: file
+      source: validation/validate-private-repo-not-discovered.sh
+      hint: "The visibility filter takes a list. Decide which values of the list the task allows."
+    - name: schedule-reasonable
+      description: "The provider runs no more often than every 10 minutes and has a timeout"
+      type: file
+      source: validation/validate-schedule-reasonable.sh
+      hint: "The schedule needs a frequency and a timeout. Write the frequency as an object such as minutes or hours, and keep it from running every few seconds."
+    - name: scope-not-widened
+      description: "The provider keeps its organization and branch scope and the descriptor repositories still exist"
+      type: file
+      source: validation/validate-scope-not-widened.sh
+      hint: "Do not solve the task by removing filters or adding static locations. Keep the organization and the main branch, and keep all eight repositories."
+
+teardown:
+  keepCluster: false

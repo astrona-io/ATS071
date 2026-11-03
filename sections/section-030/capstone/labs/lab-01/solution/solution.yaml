@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-bridge
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Routes requests from the shuttle to the scout
+      annotations:
+        github.com/project-slug: starfleet-org/bridge
+        backstage.io/kubernetes-id: bridge
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Website that shows scan results
+      annotations:
+        github.com/project-slug: starfleet-org/scout
+        backstage.io/kubernetes-id: scout
+        backstage.io/source-location: url:https://git.starfleet.example/scout/tree/main/
+        backstage.io/techdocs-ref: dir:.
+    spec:
+      type: website
+      lifecycle: experimental
+      owner: scout-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-shuttle
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: shuttle
+      description: Carries cargo between outposts
+      annotations:
+        github.com/project-slug: starfleet-org/shuttle
+        backstage.io/kubernetes-id: shuttle
+        backstage.io/view-url: https://git.starfleet.example/shuttle/blob/main/catalog-info.yaml
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-probe
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: probe
+      description: Sends sensor readings to the bridge
+      annotations:
+        example.com/oncall-schedule: https://oncall.starfleet.example/probe
+    spec:
+      type: service
+      lifecycle: production
+      owner: scout-team

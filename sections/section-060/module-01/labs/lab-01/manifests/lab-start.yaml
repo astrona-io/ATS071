@@ -1,0 +1,217 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      rules:
+        - allow: [Component, System, API, Resource, Location, Group, User]
+      locations:
+        - type: url
+          target: https://git.starfleet.example/starfleet-org/blob/main/org.yaml
+      providers:
+        github:
+          starfleetServices:
+            organization: starfleet
+            catalogPath: /catalog.yaml
+            filters:
+              branch: develop
+              topic:
+                include: [catalog]
+              visibility: [public]
+            schedule:
+              frequency: { seconds: 20 }
+              timeout: { minutes: 3 }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-starfleet-org
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "org"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "main"
+data:
+  org.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: starfleet-ops
+      description: Operates the bridge and shuttle services
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: scout-team
+      description: Builds the scout website
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [starfleet-ops]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-bridge
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,service"
+    astrona.io/visibility: "internal"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Routes requests from the shuttle to the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,website"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Website that shows scan results
+    spec:
+      type: website
+      lifecycle: production
+      owner: group:default/scout-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-shuttle
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,service"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: shuttle
+      description: Carries requests from users to the bridge
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-probe
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,experiment"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: probe
+      description: Experimental scanner
+    spec:
+      type: experimental
+      lifecycle: production
+      owner: group:default/starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-vault
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,service"
+    astrona.io/visibility: "private"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: vault
+      description: Stores signing material
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-hangar-legacy
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "starfleet"
+    astrona.io/topics: "catalog,service"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "master"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: hangar-legacy
+      description: Old hangar scheduler
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-outpost-relay
+  namespace: catalog-source
+  annotations:
+    astrona.io/organization: "outpost-labs"
+    astrona.io/topics: "catalog,service"
+    astrona.io/visibility: "public"
+    astrona.io/default-branch: "main"
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: outpost-relay
+      description: Relay run by the outpost team
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops

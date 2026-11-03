@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-bridge
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: System
+    metadata:
+      name: navigation
+    spec:
+      owner: starfleet-ops
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Routes requests from the shuttle to the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: group:default/starfleet-ops
+      system: navigation
+      providesApis: [bridge-api]
+      dependsOn: [resource:default/telemetry-db]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: API
+    metadata:
+      name: bridge-api
+    spec:
+      type: openapi
+      lifecycle: production
+      owner: starfleet-ops
+      system: navigation
+      definition: |
+        openapi: 3.0.0
+        info: {title: bridge, version: "1"}
+        paths: {}
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Resource
+    metadata:
+      name: telemetry-db
+    spec:
+      type: database
+      owner: starfleet-ops
+      system: navigation
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Website that shows scan results
+    spec:
+      type: website
+      lifecycle: experimental
+      owner: scout-team
+      consumesApis: [bridge-api]

@@ -1,5 +1,5 @@
 version: 1
-approval: CBA requested 2026-10-11; established reading-only scope
+approval: CBA requested 2026-10-11; reading-only rule lifted 2026-11-03 (labs, playgrounds, capstones, quizzes in scope)
 course:
   id: ATS071
   certification:
@@ -16,18 +16,18 @@ course:
     - Troubleshooting entity ingestion
     - Working with automated ingestion
 defaults:
-  playground: false
-  module_lab: false
-  capstone: false
-  section_quiz: false
+  playground: true
+  module_lab: true
+  capstone: true
+  section_quiz: true
   final_quiz: true
-assessment_format: YAML question banks v1, registered in assessments/index.yaml
+assessment_format: quiz.yaml question banks per section plus sections/final-domain-quiz.yaml
 sections:
 - id: section-010
   title: Understand how/why to use Backstage Catalog
   curriculum_item: Understand how/why to use Backstage Catalog
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Software Entities, Ownership And Discoverable Relationships
@@ -37,16 +37,16 @@ sections:
     - Reason about ownership, freshness and catalog usefulness.
     outline:
     - Software Entities, Ownership And Discoverable Relationships
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
       adapted_from: null
 - id: section-020
   title: Populate Backstage Catalog
   curriculum_item: Populate Backstage Catalog
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Descriptors, Entity Policies And Catalog Population
@@ -56,15 +56,15 @@ sections:
     - Distinguish accepted entity kinds from valid YAML syntax.
     outline:
     - Descriptors, Entity Policies And Catalog Population
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
       adapted_from: null
 - id: section-030
   title: Using annotations
   curriculum_item: Using annotations
-  capstone: false
+  capstone: true
   section_quiz: true
   modules:
   - id: module-01
@@ -75,16 +75,16 @@ sections:
     - Diagnose incorrect integration mappings without treating metadata as permission.
     outline:
     - Annotation Contracts And External Identity Mapping
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
       adapted_from: null
 - id: section-040
   title: Working with manually registered entity locations
   curriculum_item: Working with manually registered entity locations
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Registered Locations, Source Access And Entity Lifecycle
@@ -94,16 +94,16 @@ sections:
     - Diagnose registration, fetch and processing failures separately.
     outline:
     - Registered Locations, Source Access And Entity Lifecycle
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
       adapted_from: null
 - id: section-050
   title: Troubleshooting entity ingestion
   curriculum_item: Troubleshooting entity ingestion
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Fetching, Processing, Stitching And Publication Evidence
@@ -113,16 +113,16 @@ sections:
     - Explain processing errors without confusing them with service outages.
     outline:
     - Fetching, Processing, Stitching And Publication Evidence
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
       adapted_from: null
 - id: section-060
   title: Working with automated ingestion
   curriculum_item: Working with automated ingestion
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
     title: Entity Providers, Discovery Scope And Repeatable Ingestion
@@ -132,8 +132,8 @@ sections:
     - Identify ownership, filtering and credential risks in automated discovery.
     outline:
     - Entity Providers, Discovery Scope And Repeatable Ingestion
-    playground: false
-    module_lab: false
+    playground: true
+    module_lab: true
     sources:
     - reading: sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
       adapted_from: null

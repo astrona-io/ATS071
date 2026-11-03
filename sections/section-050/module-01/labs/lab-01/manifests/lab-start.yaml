@@ -1,0 +1,148 @@
+# Starting state of the lab. Five faults, one per ingestion stage. Do not read this file before solving.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      rules:
+        - allow: [Component, System, API, Group, User, Location]
+      locations:
+        - type: url
+          target: https://git.starfleet.example/starfleet-org/blob/main/org.yaml
+        - type: url
+          target: https://git.starfleet.example/bridge/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/scout/blob/master/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/probe/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/drifter/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/shuttle/blob/main/catalog-info.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-starfleet-org
+  namespace: catalog-source
+data:
+  org.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: starfleet-ops
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: scout-team
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [starfleet-ops]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-bridge
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Routes requests from the shuttle to the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+      dependsOn: [resource:default/telemetry-db]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Resource
+    metadata:
+      name: telemetry-db
+    spec:
+      type: database
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Public website of the scout team
+    spec:
+      type: website
+      lifecycle: production
+      owner: scout-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-probe
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: Probe Service
+      description: Collects telemetry from the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-drifter
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: drifter
+      description: Reaches the probe: always through the bridge
+    spec:
+      type: service
+      lifecycle: experimental
+      owner: scout-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-shuttle
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Carries crew between the bridge and the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops

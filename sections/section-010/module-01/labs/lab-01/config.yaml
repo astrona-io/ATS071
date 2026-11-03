@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix Ownership And Relations (LAB). Graded against the live cluster. Make owners and relations resolve for the navigation estate.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-010-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: bridge-owner-exists
+      description: "The bridge Component is ingested and owned by the Group starfleet-ops"
+      type: file
+      source: validation/validate-bridge-owner-exists.sh
+      hint: "An owner must be an entity that the catalog ingested. Look at the Group names in the organization file."
+    - name: bridge-depends-on-database
+      description: "The bridge Component depends on the resource telemetry-db and the relation resolves"
+      type: file
+      source: validation/validate-bridge-depends-on-database.sh
+      hint: "A dependsOn reference to a Resource needs the kind in front of the name."
+    - name: api-belongs-to-system
+      description: "The bridge-api API is part of the System navigation"
+      type: file
+      source: validation/validate-api-belongs-to-system.sh
+      hint: "Compare the system name in the API with the name of the System entity."
+    - name: scout-consumes-bridge-api
+      description: "The scout Component consumes the API bridge-api and the relation resolves"
+      type: file
+      source: validation/validate-scout-consumes-bridge-api.sh
+      hint: "Check the spelling of the API name that scout consumes."
+    - name: no-errors-no-unresolved
+      description: "The catalog has no processing errors and no unresolved relations"
+      type: file
+      source: validation/validate-no-errors-no-unresolved.sh
+      hint: "Read the errors and the unresolved list in the report until both are empty."
+    - name: estate-kept
+      description: "Nothing was deleted, the three repositories and the owners are still in place"
+      type: file
+      source: validation/validate-estate-kept.sh
+      hint: "Fix the descriptors in place. Do not delete repositories or entities to make the report clean."
+
+teardown:
+  keepCluster: false

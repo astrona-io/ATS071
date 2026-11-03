@@ -1,0 +1,148 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      locations:
+        - type: url
+          target: https://git.starfleet.example/bridge/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/scout/blob/master/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/starfleet-org/blob/main/org.yaml
+        - type: url
+          target: https://git.starfleet.example/fleet-registry/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/legacy-probe/blob/main/catalog-info.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-starfleet-org
+  namespace: catalog-source
+data:
+  org.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: starfleet-ops
+      description: Operates the bridge service
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: fleet-team
+      description: Builds the shuttle and the cargo hauler
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: scout-team
+      description: Builds the scout website
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [starfleet-ops]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-fleet-registry
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Location
+    metadata:
+      name: fleet-registry
+      description: Lists the descriptor files of the fleet team
+    spec:
+      targets:
+        - ./shuttle.yaml
+        - ./cargo.yml
+  shuttle.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: shuttle
+      description: Carries crew between the bridge and the outpost
+    spec:
+      type: service
+      lifecycle: production
+      owner: fleet-team
+  cargo.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: cargo-hauler
+      description: Plans cargo loads
+    spec:
+      type: service
+      lifecycle: experimental
+      owner: fleet-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-bridge
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: bridge
+      description: Routes requests from the shuttle to the scout
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Website that shows scan results
+    spec:
+      type: website
+      lifecycle: experimental
+      owner: scout-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-legacy-probe
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: probe
+      description: Retired survey probe
+    spec:
+      type: service
+      lifecycle: deprecated
+      owner: starfleet-ops

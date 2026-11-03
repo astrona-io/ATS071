@@ -1,0 +1,287 @@
+# Knowledge check for section-030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-030
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-030
+  title: Using annotations
+questions:
+- id: ats071-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain how a plugin interprets an annotation value
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  prompt: A GitHub card on the page of the Component `scout` shows the pull requests
+    of the `bridge` repository. The catalog reports no error. What is the most likely
+    cause?
+  options:
+  - id: a
+    text: The annotation `github.com/project-slug` on `scout` holds the slug of the
+      `bridge` repository.
+    explanation: Correct. The catalog stores the string and the plugin uses it, so
+      a well-formed value for the wrong repository shows real data about the wrong
+      component.
+  - id: b
+    text: The catalog backend failed to ingest `scout`.
+    explanation: The page shows an entity, so it was ingested. An ingestion failure
+      would remove or hide it.
+  - id: c
+    text: The GitHub plugin has no credential.
+    explanation: A missing credential would give an error or an empty card, not data
+      from another repository.
+  - id: d
+    text: The `owner` field of `scout` names the wrong Group.
+    explanation: The owner field produces an ownership relation. It does not choose
+      the repository that a GitHub card reads.
+  correct_option: a
+  explanation: The plugin reads the annotation value and asks for that repository.
+    The catalog only checks that the value is a string.
+- id: ats071-030-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Diagnose incorrect integration mappings without treating metadata
+    as permission
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  prompt: A developer adds the annotation `example.com/ci-token` with a real token
+    so that a build card can read a private project. What is true about this change?
+  options:
+  - id: a
+    text: The token is hidden because annotation values are encrypted.
+    explanation: Annotations are plain metadata. Nothing encrypts them.
+  - id: b
+    text: Only the owner of the Component can read the token.
+    explanation: Anyone who can read the catalog can read the entity and its annotations.
+  - id: c
+    text: The token is readable by anyone who can read the entity, so it must be removed
+      and rotated.
+    explanation: Correct. Annotations are catalog metadata, not a credential store.
+      Credentials belong in backend configuration.
+  - id: d
+    text: The token gives each viewer access to the build project.
+    explanation: An annotation grants no access. The backend plugin calls the external
+      system with its own credential.
+  correct_option: c
+  explanation: Annotations are visible metadata. Authentication belongs in the backend
+    configuration.
+- id: ats071-030-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish annotations from labels and core specification fields
+  source_readings:
+  - sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+  prompt: 'An author writes `backstage.io/techdocs-ref: dir:.` under `metadata.labels`.
+    What does the catalog do with the entity?'
+  options:
+  - id: a
+    text: It stores the label and ignores the colon.
+    explanation: A label value is validated against a strict name rule and the colon
+      is not allowed.
+  - id: b
+    text: It converts the label to an annotation.
+    explanation: The catalog never moves values between maps.
+  - id: c
+    text: It ingests the entity and the TechDocs plugin reads the label.
+    explanation: The entity is not ingested, and plugins read annotations, not labels.
+  - id: d
+    text: It rejects the entity at the policy stage because the label value is not
+      valid.
+    explanation: Correct. A label value is letters and digits separated by - _ or
+      ., at most 63 characters, so dir:. fails and the whole entity is rejected.
+  correct_option: d
+  explanation: Label values follow the name rule. A locator belongs in an annotation.
+- id: ats071-030-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish annotations from labels and core specification fields
+  source_readings:
+  - sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+  prompt: 'A descriptor has `example.com/pager-enabled: true` without quotes under
+    `metadata.annotations`. The checker reports that the value must be a string. How
+    do you fix it?'
+  options:
+  - id: a
+    text: Move the key to `metadata.labels`.
+    explanation: A label value has stricter rules and this move would not address
+      the type problem.
+  - id: b
+    text: Write the value as the quoted string `"true"`.
+    explanation: Correct. YAML reads an unquoted true as a boolean. Quoting makes
+      it a string, which annotations require.
+  - id: c
+    text: Rename the key to start with `backstage.io/`.
+    explanation: The prefix is reserved for Backstage and has nothing to do with the
+      type of the value.
+  - id: d
+    text: Delete the annotation because booleans are not allowed anywhere.
+    explanation: The annotation is fine as a string. Deleting it loses the data.
+  correct_option: b
+  explanation: Annotation values must be strings, and YAML turns unquoted true and
+    numbers into other types.
+- id: ats071-030-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish annotations from labels and core specification fields
+  source_readings:
+  - sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+  prompt: 'A Component descriptor has no `spec.lifecycle` but has the annotation `example.com/lifecycle:
+    production`. What does the catalog report?'
+  options:
+  - id: a
+    text: No error. The annotation satisfies the requirement.
+    explanation: The kind validator reads only spec, so an annotation never satisfies
+      a required field.
+  - id: b
+    text: 'A kind error: `/spec` must have the required property `lifecycle`.'
+    explanation: Correct. The annotation is valid, but the kind validator still requires
+      the field in the spec.
+  - id: c
+    text: A policy error for the annotation key.
+    explanation: The key has a valid prefix and name, so the policy stage accepts
+      it.
+  - id: d
+    text: A warning only. The entity is still ingested.
+    explanation: A kind validation failure rejects the entity.
+  correct_option: b
+  explanation: Required data of a kind belongs in spec.
+- id: ats071-030-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain how a plugin interprets an annotation value
+  source_readings:
+  - sections/section-030/module-01/course-03-well-known-annotations.md
+  prompt: Which value is the correct format for `github.com/project-slug` on a component
+    whose repository is `bridge` in the organization `starfleet-org`?
+  options:
+  - id: a
+    text: "`https://github.com/starfleet-org/bridge`"
+    explanation: A full web address is the wrong format.
+  - id: b
+    text: "`bridge`"
+    explanation: The slug needs the owner and the repository.
+  - id: c
+    text: "`url:starfleet-org/bridge`"
+    explanation: 'The url: prefix is for location references such as source-location,
+      not for the slug.'
+  - id: d
+    text: "`starfleet-org/bridge`"
+    explanation: Correct. The slug is <owner>/<repository>, the part of the address
+      after the host.
+  correct_option: d
+  explanation: The project slug is the repository path with the owner.
+- id: ats071-030-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the common well-known annotation keys and the value format
+    of each
+  source_readings:
+  - sections/section-030/module-01/course-03-well-known-annotations.md
+  prompt: Which value is correct for `backstage.io/source-location` that points at
+    the folder `main` of the `scout` repository?
+  options:
+  - id: a
+    text: "`url:https://git.starfleet.example/scout/tree/main/`"
+    explanation: Correct. It is a location reference, and a folder needs the trailing
+      slash.
+  - id: b
+    text: "`https://git.starfleet.example/scout/tree/main`"
+    explanation: 'It lacks the url: prefix of a location reference and the trailing
+      slash.'
+  - id: c
+    text: "`dir:.`"
+    explanation: That is the usual value for techdocs-ref and points at a directory
+      relative to the descriptor.
+  - id: d
+    text: "`scout`"
+    explanation: A bare name is not a location reference.
+  correct_option: a
+  explanation: Source locations are location references, and folders end with a slash.
+- id: ats071-030-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why authors do not write the annotations that the catalog
+    adds
+  source_readings:
+  - sections/section-030/module-01/course-03-well-known-annotations.md
+  prompt: A reviewer finds `backstage.io/managed-by-location` written by hand in a
+    descriptor. What is the right action?
+  options:
+  - id: a
+    text: Keep it, because it makes ingestion faster.
+    explanation: It has no effect on speed.
+  - id: b
+    text: Remove it, because the catalog adds the key itself when it reads the file.
+    explanation: Correct. The catalog records the location that it fetched the file
+      from, so an authored value is unnecessary and may mislead.
+  - id: c
+    text: Replace it with `backstage.io/techdocs-ref`.
+    explanation: The two keys have different jobs.
+  - id: d
+    text: Move it to `metadata.labels`.
+    explanation: A label cannot hold a location reference.
+  correct_option: b
+  explanation: The catalog adds managed-by-location to know which location each entity
+    came from.
+- id: ats071-030-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Diagnose incorrect integration mappings without treating metadata
+    as permission
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  - sections/section-030/module-01/course-03-well-known-annotations.md
+  prompt: A new Component `probe` was created by copying the descriptor of `bridge`,
+    and the author changed only the name. The Kubernetes tab on `probe` shows pods
+    and no errors appear. What should the reviewer check first?
+  options:
+  - id: a
+    text: Whether the catalog is running.
+    explanation: The entity page works, so the catalog is running.
+  - id: b
+    text: Whether the owner Group exists.
+    explanation: That is a relation question and not the cause of the wrong pods.
+  - id: c
+    text: Whether the `backstage.io/kubernetes-id` and related annotations still hold
+      the values of `bridge`.
+    explanation: Correct. A copied identity passes every format check and shows real
+      data for the wrong component.
+  - id: d
+    text: Whether the Kubernetes plugin grants every user access.
+    explanation: Annotations do not decide access, and the problem is the wrong data.
+  correct_option: c
+  explanation: Copied annotations carry the external identity of the source component.
+- id: ats071-030-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Diagnose incorrect integration mappings without treating metadata
+    as permission
+  source_readings:
+  - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+  - sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+  prompt: An annotation key is written as `on call/schedule`. What does the policy
+    stage do?
+  options:
+  - id: a
+    text: It accepts the key because annotation keys are free text.
+    explanation: Keys follow a prefix and name rule, and a space is not allowed.
+  - id: b
+    text: It trims the space and stores `on-call/schedule`.
+    explanation: The catalog does not rewrite keys.
+  - id: c
+    text: It rejects the entity because the key is not a valid prefix and name.
+    explanation: Correct. The key must be an optional domain prefix, a slash and a
+      name of letters, digits and - _ .
+  - id: d
+    text: It ingests the entity and drops only that annotation.
+    explanation: The catalog does not drop single annotations. It rejects the whole
+      entity.
+  correct_option: c
+  explanation: Annotation keys follow the same format as labels.

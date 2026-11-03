@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Descriptors, Rules And Locations Capstone (LAB). Graded against the live cluster. A catalog with restrictive rules, an unregistered repository and invalid descriptors. Fix the rules, register the location and repair the descriptors.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-020
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: rules-allow-system-and-location
+      description: "System and Location entities are allowed and accepted"
+      type: file
+      source: validation/validate-rules-allow-system-and-location.sh
+      hint: "Read the rules-stage errors. The global catalog.rules list replaces the defaults, so every kind you need must be in it."
+    - name: org-accepted-from-org-file
+      description: "The groups and the user of the organization file are accepted"
+      type: file
+      source: validation/validate-org-accepted-from-org-file.sh
+      hint: "Groups and users should be allowed for the organization file only. A rule can belong to one location."
+    - name: rogue-group-stays-blocked
+      description: "A Group declared in the harbor repository is still not accepted"
+      type: file
+      source: validation/validate-rogue-group-stays-blocked.sh
+      hint: "Allow Group and User only for the location of the organization file, not in the global rules."
+    - name: harbor-relations-resolve
+      description: "harbor-control is accepted and its owner and system resolve"
+      type: file
+      source: validation/validate-harbor-relations-resolve.sh
+      hint: "A relation resolves when the entity it points at is accepted."
+    - name: dock-location-registered
+      description: "The dock repository is a configured location that can be read"
+      type: file
+      source: validation/validate-dock-location-registered.sh
+      hint: "A repository that is not in catalog.locations is never read."
+    - name: dock-entities-valid
+      description: "dock-gate and dock-api are accepted and the API reference resolves"
+      type: file
+      source: validation/validate-dock-entities-valid.sh
+      hint: "Once the file is read, the report shows one policy error and one kind error for it."
+    - name: ops-services-read
+      description: "The service file listed by the ops Location is read and ops-gateway is accepted"
+      type: file
+      source: validation/validate-ops-services-read.sh
+      hint: "A Location entity only adds its targets after the Location itself is accepted. Then check the new entity for errors."
+    - name: catalog-intact
+      description: "No repository was removed and the Component and API kinds are still allowed"
+      type: file
+      source: validation/validate-catalog-intact.sh
+      hint: "Fix the configuration and the descriptors. Do not delete repositories or remove the kinds that are already allowed."
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-starfleet-org
+  namespace: catalog-source
+data:
+  org.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: starfleet-ops
+      description: Operates the fleet services
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: scout-team
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [starfleet-ops]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-telemetry
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: probe-telemetry
+      description: Receives readings from the probe
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-relay
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: relay
+      description: Forwards messages between ships
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-cargo
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: cargo
+      description: Tracks the cargo of each ship
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops
+      providesApis: [cargo-api]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: API
+    metadata:
+      name: cargo-api
+    spec:
+      type: openapi
+      lifecycle: production
+      owner: starfleet-ops
+      definition: |
+        openapi: 3.0.0
+        info: {title: cargo, version: "1"}
+        paths: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scanner
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scanner
+      description: Scans nearby space
+    spec:
+      type: service
+      lifecycle: production
+      owner: starfleet-ops

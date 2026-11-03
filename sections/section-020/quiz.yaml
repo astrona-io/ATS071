@@ -1,0 +1,282 @@
+# Knowledge check for section-020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-020
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-020
+  title: Populate Backstage Catalog
+questions:
+- id: ats071-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Apply the metadata.name format rule
+  source_readings:
+  - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+  prompt: 'A descriptor declares a Component with `metadata.name: probe collector`.
+    The YAML is valid. What does the catalog do with this document?'
+  options:
+  - id: a
+    text: It accepts the entity and replaces the space with a hyphen.
+    explanation: The catalog never rewrites a name.
+  - id: b
+    text: It refuses the document because a name cannot contain a space, and the error
+      names the field `metadata.name`.
+    explanation: Correct. The field format policy allows letters and digits separated
+      by `-`, `_` or `.`, so a space makes the name invalid.
+  - id: c
+    text: It accepts the entity and shows the name with a space only in the title.
+    explanation: The title is a separate optional field and does not replace the name.
+  - id: d
+    text: It refuses the whole file, including every other valid document in it.
+    explanation: Each document is checked on its own, and the other documents can
+      still be accepted.
+  correct_option: b
+  explanation: The field format policy of the entity policies requires letters and
+    digits separated by `-`, `_` or `.`. A space breaks the rule, so only that document
+    is refused.
+- id: ats071-020-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Identify the required spec fields of a Group
+  source_readings:
+  - sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+  prompt: 'A team has no sub-teams. Its `Group` descriptor has `spec.type: team` and
+    nothing else. Why is the Group missing from the catalog?'
+  options:
+  - id: a
+    text: The `children` field is required, and an empty list `[]` is valid.
+    explanation: Correct. The validator requires `spec.children` and accepts an empty
+      list.
+  - id: b
+    text: A Group needs `spec.owner` like every other kind.
+    explanation: A Group does not require `owner`. Its required fields are `type`
+      and `children`.
+  - id: c
+    text: A Group is only valid when it lists at least one member.
+    explanation: Members are listed on `User` entities with `memberOf`, and an empty
+      `children` list is valid.
+  - id: d
+    text: The default rules never allow `Group`, so adding a field cannot help.
+    explanation: The rules decide whether a kind is allowed, but the missing field
+      is a separate validation failure that must be fixed too.
+  correct_option: a
+  explanation: 'The Group validator requires `spec.type` and `spec.children`. A team
+    without sub-teams writes `children: []`.'
+- id: ats071-020-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the stage of an error
+  source_readings:
+  - sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+  prompt: 'A report shows the error `kind: /spec must have required property ''lifecycle''`
+    for a Component. Which statement is correct?'
+  options:
+  - id: a
+    text: The kind is not allowed by `catalog.rules`.
+    explanation: A kind that is not allowed gives an error in the `rules` stage.
+  - id: b
+    text: The YAML text cannot be parsed.
+    explanation: A parse error has no entity name and a different stage.
+  - id: c
+    text: The envelope is wrong, so the document never reached the kind validator.
+    explanation: An envelope error is a `policy` error. This error comes from the
+      kind validator.
+  - id: d
+    text: The envelope was accepted, and the `spec` of the Component lacks a required
+      field.
+    explanation: Correct. The `kind` stage runs after the entity policies pass, and
+      it checks the `spec` of the kind.
+  correct_option: d
+  explanation: The `kind` stage means the document passed the entity policies and
+    the kind validator found a missing or wrong `spec` field.
+- id: ats071-020-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain independent checking of documents in one file
+  source_readings:
+  - sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+  prompt: A `catalog-info.yaml` holds three Component documents separated by `---`.
+    The second one has no `owner`. The first and third are correct. What does the
+    catalog do?
+  options:
+  - id: a
+    text: It refuses all three because the file is invalid.
+    explanation: Documents are checked individually.
+  - id: b
+    text: It accepts the first and third and refuses the second with a kind error.
+    explanation: Correct. Each document is a separate entity, so one failure does
+      not stop the others.
+  - id: c
+    text: It accepts all three and marks the second as having no owner.
+    explanation: A missing required field is a validation failure, so the second document
+      is refused.
+  - id: d
+    text: It accepts only the first document, because it stops at the first error.
+    explanation: The catalog does not stop at the first error in a file.
+  correct_option: b
+  explanation: Every document is validated as its own entity, so only the second document
+    is refused.
+- id: ats071-020-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish validation from relation checks
+  source_readings:
+  - sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+  prompt: 'A Component has `owner: platform-team`. No Group named `platform-team`
+    was ever accepted. What is the expected result?'
+  options:
+  - id: a
+    text: The Component is refused with a kind error.
+    explanation: The kind validator checks that the owner is a string. It does not
+      check that the owner exists.
+  - id: b
+    text: The catalog replaces the owner with `default`.
+    explanation: The catalog does not change the owner of an entity.
+  - id: c
+    text: The catalog creates an empty Group named `platform-team`.
+    explanation: The catalog never creates entities from references.
+  - id: d
+    text: The Component is ingested, and its `ownedBy` relation points at an entity
+      that is missing.
+    explanation: Correct. The reference is resolved in the relation step, and an unresolved
+      target is reported without refusing the Component.
+  correct_option: d
+  explanation: A missing owner entity is a relation problem and not a validation failure.
+- id: ats071-020-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the effect of replacing catalog.rules
+  source_readings:
+  - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+  prompt: 'An administrator sets `catalog.rules` to `- allow: [Template]` to allow
+    a new kind. Afterwards Components disappear from the catalog. Why?'
+  options:
+  - id: a
+    text: Templates and Components cannot be allowed together.
+    explanation: Any kinds can be listed together in one `allow` list.
+  - id: b
+    text: The default rules still apply and block Components.
+    explanation: The default list is not used when the key is present.
+  - id: c
+    text: The new list replaces the default list, so Component is no longer allowed.
+    explanation: Correct. A present `catalog.rules` key replaces the defaults, so
+      every needed kind must be listed.
+  - id: d
+    text: Components need a rule for each location.
+    explanation: A global rule applies to every location.
+  correct_option: c
+  explanation: A `catalog.rules` list replaces the default list, so the administrator
+    must list Component and every other kind that must stay allowed.
+- id: ats071-020-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use a per-location rule for an organization file
+  source_readings:
+  - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+  prompt: Only the file `org.yaml` should be allowed to add `Group` and `User` entities.
+    A `Group` in any service repository must stay refused. Which configuration does
+    this?
+  options:
+  - id: a
+    text: Add `Group` and `User` to the global `catalog.rules` list.
+    explanation: That allows Group and User from every file.
+  - id: b
+    text: 'Add a `rules` list with `allow: [Group, User]` to the `catalog.locations`
+      entry of `org.yaml`.'
+    explanation: Correct. A rule on a location applies only to the file of that location.
+  - id: c
+    text: Remove `catalog.rules` so the defaults apply.
+    explanation: The default list does not include Group and User.
+  - id: d
+    text: Rename the file to `catalog-info.yaml`.
+    explanation: The file name does not change which kinds are allowed.
+  correct_option: b
+  explanation: A location rule adds kinds for that file only, so the global list stays
+    short.
+- id: ats071-020-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Separate registration from publication
+  source_readings:
+  - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+  prompt: A team registered a location and the report shows the location with the
+    status `ok`, but the team's Component is not in the catalog. Which conclusion
+    is correct?
+  options:
+  - id: a
+    text: The location registration failed.
+    explanation: The status `ok` shows the file was found.
+  - id: b
+    text: The source host has an outage.
+    explanation: The file was read, so the host is reachable.
+  - id: c
+    text: The Component was ingested, and the interface is out of date.
+    explanation: The report shows the result and it does not list the Component as
+      ingested.
+  - id: d
+    text: The file was found, but a document in it can still fail validation, the
+      rules or a relation check.
+    explanation: Correct. Registration and fetching only get the file to the catalog.
+      Each document must still be accepted.
+  correct_option: d
+  explanation: A registered, readable location does not guarantee accepted entities,
+    so the next step is to read the errors of that location.
+- id: ats071-020-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain how a Location entity extends the catalog
+  source_readings:
+  - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+  prompt: 'A repository descriptor has a `Location` entity with `spec.targets: [./services.yaml]`.
+    `catalog.rules` allows only `Component` and `API`. What happens to `services.yaml`?'
+  options:
+  - id: a
+    text: It is read, because relative targets always bypass the rules.
+    explanation: The `Location` entity itself must be allowed first.
+  - id: b
+    text: It is read, but its Components are refused.
+    explanation: The file is not read at all while the `Location` entity is refused.
+  - id: c
+    text: The `Location` entity is refused by the rules, so `services.yaml` is not
+      read.
+    explanation: Correct. The catalog follows the targets only of an accepted `Location`
+      entity, so `Location` must be in the allowed kinds.
+  - id: d
+    text: It is read when the repository is renamed.
+    explanation: Renaming a repository does not affect how targets are followed.
+  correct_option: c
+  explanation: Targets are followed only after the Location entity is accepted, and
+    that needs the kind `Location` to be allowed.
+- id: ats071-020-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Spot a foreign root field
+  source_readings:
+  - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+  prompt: 'An author writes `owner: team-a` at the top level of the descriptor, next
+    to `kind` and `metadata`, instead of inside `spec`. What does the report show?'
+  options:
+  - id: a
+    text: A `policy` error about a foreign root field, because the envelope allows
+      only defined top-level fields.
+    explanation: Correct. The foreign root fields policy refuses fields the envelope
+      does not define.
+  - id: b
+    text: A `rules` error, because owners are not allowed.
+    explanation: Rules limit kinds and not fields.
+  - id: c
+    text: No error, because the catalog moves the field into `spec`.
+    explanation: The catalog never moves fields.
+  - id: d
+    text: A `parse` error, because the YAML is not valid.
+    explanation: The YAML is valid, so the document parses.
+  correct_option: a
+  explanation: The envelope allows `apiVersion`, `kind`, `metadata`, `spec`, `relations`
+    and `status` at the top level, so another field fails the entity policies.

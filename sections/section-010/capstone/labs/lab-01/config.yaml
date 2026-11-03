@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Model The Shipyard Estate (LAB). Graded against the live cluster. Model a small estate from scratch with owners, a system, a domain and relations.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-010
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: system-in-domain
+      description: "The System shipyard exists, is owned by yard-ops and is part of the Domain logistics"
+      type: file
+      source: validation/validate-system-in-domain.sh
+      hint: "A System names its Domain in spec.domain, and a Domain is its own entity that needs an owner."
+    - name: api-provided-by-gate
+      description: "The API gate-api exists in the System shipyard and the gate Component provides it"
+      type: file
+      source: validation/validate-api-provided-by-gate.sh
+      hint: "The API is its own entity with a type, a lifecycle, an owner and a definition. The Component lists it in providesApis."
+    - name: gate-database
+      description: "The Resource dock-db exists in shipyard and the gate Component depends on it"
+      type: file
+      source: validation/validate-gate-database.sh
+      hint: "A Resource needs a type and an owner. A dependsOn reference to it needs the kind in front of the name."
+    - name: components-in-system
+      description: "The Components gate and berth-board are both part of the System shipyard"
+      type: file
+      source: validation/validate-components-in-system.sh
+      hint: "Set the system field on each Component that belongs to the System."
+    - name: berth-board-consumes-api
+      description: "The berth-board Component consumes gate-api and the relation resolves"
+      type: file
+      source: validation/validate-berth-board-consumes-api.sh
+      hint: "The consumed API did not exist at the start. A relation resolves when its target is ingested."
+    - name: clean-report
+      description: "The catalog has no processing errors and no unresolved relations"
+      type: file
+      source: validation/validate-clean-report.sh
+      hint: "Read the errors and the unresolved list until both are empty."
+    - name: owners-kept
+      description: "The three repositories, both teams and the owner of berth-board are unchanged"
+      type: file
+      source: validation/validate-owners-kept.sh
+      hint: "Add what is missing. Do not delete repositories or change the existing owners."
+
+teardown:
+  keepCluster: false

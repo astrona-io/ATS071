@@ -1,0 +1,472 @@
+# Domain review for ATS071. Listed in astrona.yaml as the final `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats071-final
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: backstage-catalog
+  title: "Backstage Catalog"
+questions:
+  - id: ats071-final-s010-q1
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Read an entity reference and name its kind.
+    source_readings:
+    - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+    prompt: What does the reference `api:default/gate-api` identify?
+    options:
+    - id: a
+      text: The API entity named gate-api in the default namespace.
+      explanation: Correct. The parts are kind, namespace and name.
+    - id: b
+      text: A Component named api in the gate-api namespace.
+      explanation: The kind is the part before the colon.
+    - id: c
+      text: A Kubernetes Service in the default namespace.
+      explanation: The catalog namespace is not a Kubernetes namespace.
+    - id: d
+      text: A URL of the OpenAPI file.
+      explanation: A reference is not a URL.
+    correct_option: a
+    explanation: kind:namespace/name identifies one entity in the catalog.
+  - id: ats071-final-s010-q2
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Fix a missing owner.
+    source_readings:
+    - sections/section-010/module-01/course-02-ownership-and-relationships.md
+    prompt: A Component names `bridge-crew` as its owner, and no Group with that name
+      exists. What is the correct fix?
+    options:
+    - id: a
+      text: Delete the Component.
+      explanation: That removes the software from the catalog instead of fixing the
+        owner.
+    - id: b
+      text: Point owner at an existing Group, or add the Group to an organization descriptor.
+      explanation: Correct. The owner must be an entity in the catalog.
+    - id: c
+      text: Set lifecycle to experimental.
+      explanation: Lifecycle does not change owner resolution.
+    - id: d
+      text: Add the owner to metadata.labels.
+      explanation: Labels do not create ownership.
+    correct_option: b
+    explanation: The ownedBy relation resolves only when the owner entity exists.
+  - id: ats071-final-s010-q3
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Judge data trust.
+    source_readings:
+    - sections/section-010/module-01/course-03-source-of-truth-freshness-and-adoption.md
+    prompt: Where should a descriptor for a service normally live?
+    options:
+    - id: a
+      text: In the Backstage database, edited by hand.
+      explanation: The catalog reads files; it is not where people edit.
+    - id: b
+      text: In a shared spreadsheet.
+      explanation: A spreadsheet cannot be reviewed with the code.
+    - id: c
+      text: In a separate repository that only the platform team owns.
+      explanation: That separates the file from the team that knows the facts.
+    - id: d
+      text: In the same repository as the code, changed in the same review.
+      explanation: Correct. The facts then change together with the code.
+    correct_option: d
+    explanation: Descriptors next to the code are reviewed and versioned with it.
+  - id: ats071-final-s020-q1
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Order the checks that a descriptor document passes
+    source_readings:
+    - sections/section-020/module-01/course-01-descriptors-entity-policies-and-catalog-population.md
+    - sections/section-020/module-01/course-02-kinds-required-fields-and-multi-document-files.md
+    prompt: A document has an invalid `metadata.name` and also lacks `spec.lifecycle`.
+      After the name is corrected, what does the author see next?
+    options:
+    - id: a
+      text: Nothing, because the catalog accepts the Component.
+      explanation: The missing lifecycle is still a validation failure.
+    - id: b
+      text: A kind error about the missing `lifecycle`, because the earlier policy check
+        hid it.
+      explanation: Correct. A document that fails the entity policies never reaches
+        the kind validator, so the second error appears after the first is fixed.
+    - id: c
+      text: A parse error for the corrected name.
+      explanation: A corrected name is valid YAML and a valid name.
+    - id: d
+      text: A rules error for the Component kind.
+      explanation: Component is in the default rules.
+    correct_option: b
+    explanation: The entity policies run before the kind validator, so the kind error
+      is visible only after the policy error is fixed.
+  - id: ats071-final-s020-q2
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Explain why a repository is not read
+    source_readings:
+    - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+    prompt: A new repository has a correct `catalog-info.yaml`. Nobody added it to `catalog.locations`,
+      and no `Location` entity or discovery points at it. What does the catalog do?
+    options:
+    - id: a
+      text: It reads the file because it is named `catalog-info.yaml`.
+      explanation: The file name does not make the catalog read a repository.
+    - id: b
+      text: It refuses the file with a policy error.
+      explanation: The file is never read, so no policy runs.
+    - id: c
+      text: It never reads the file, so no entity from it appears.
+      explanation: Correct. A file is read only when a location points at it.
+    - id: d
+      text: It reads the file after the next restart of the cluster.
+      explanation: A restart does not add locations.
+    correct_option: c
+    explanation: A location is the way a file enters ingestion, so a repository without
+      one is never read.
+  - id: ats071-final-s020-q3
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Choose a rule design for organization data
+    source_readings:
+    - sections/section-020/module-01/course-03-catalog-rules-and-registering-locations.md
+    prompt: Which design best limits who can add teams to the catalog?
+    options:
+    - id: a
+      text: Allow `Group` and `User` globally so every team can add its own.
+      explanation: Any repository could then add groups.
+    - id: b
+      text: Remove `Group` and `User` from every rule and add the teams by hand in the
+        interface.
+      explanation: This stops automated organization data and does not use a controlled
+        source.
+    - id: c
+      text: Put the teams in each service descriptor and allow `Group` globally.
+      explanation: This spreads ownership of organization data over many files.
+    - id: d
+      text: Keep `Group` and `User` out of the global list and allow them in a rule
+        on the location of one maintained organization file.
+      explanation: Correct. Only the maintained file can add Groups and Users.
+    correct_option: d
+    explanation: A rule on one location keeps the permission narrow and leaves organization
+      data in one maintained source.
+  - id: ats071-final-s030-q1
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Distinguish annotations from labels and core specification fields
+    source_readings:
+    - sections/section-030/module-01/course-02-labels-annotations-and-spec-fields.md
+    prompt: A team wants to store the link to its on-call schedule on a Component so
+      that an internal plugin can show it. Where should the value go?
+    options:
+    - id: a
+      text: In an annotation under a key with the organization's own domain prefix.
+      explanation: Correct. A plugin-specific pointer to an external system is an annotation,
+        and a domain prefix avoids collisions.
+    - id: b
+      text: In a new field under `spec`.
+      explanation: The catalog and its tools read only the spec fields that the kind
+        defines.
+    - id: c
+      text: In `metadata.labels`, because labels are for links.
+      explanation: Label values are short names and cannot hold a link.
+    - id: d
+      text: In `metadata.tags`.
+      explanation: Tags are single words that classify an entity.
+    correct_option: a
+    explanation: Annotations hold pointers to external systems.
+  - id: ats071-final-s030-q2
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Explain how a plugin interprets an annotation value
+    source_readings:
+    - sections/section-030/module-01/course-01-annotation-contracts-and-external-identity-mapping.md
+    prompt: 'A user can see the annotation `github.com/project-slug: starfleet-org/secret-tools`
+      on an entity page. The GitHub backend credential cannot read that repository.
+      What does the user get?'
+    options:
+    - id: a
+      text: Read access to the repository, because the annotation names it.
+      explanation: An annotation grants no access.
+    - id: b
+      text: Read access only if the user is the owner of the Component.
+      explanation: Ownership in the catalog is not a permission on GitHub.
+    - id: c
+      text: Nothing from the repository. The backend plugin calls GitHub with its own
+        credential, which fails.
+      explanation: Correct. The annotation only identifies the repository.
+    - id: d
+      text: A copy of the repository inside the catalog.
+      explanation: The catalog stores pointers, not copies.
+    correct_option: c
+    explanation: Annotations are identifiers, not permissions.
+  - id: ats071-final-s030-q3
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Name the common well-known annotation keys and the value format
+      of each
+    source_readings:
+    - sections/section-030/module-01/course-03-well-known-annotations.md
+    prompt: A descriptor is generated from a template and the real file that people
+      edit lives in another repository. Which annotations point the entity page to the
+      right files?
+    options:
+    - id: a
+      text: "`backstage.io/managed-by-location` and `backstage.io/managed-by-origin-location`"
+      explanation: The catalog writes these. Authors do not set them.
+    - id: b
+      text: "`backstage.io/view-url` and `backstage.io/edit-url`"
+      explanation: Correct. They change the links shown for the canonical descriptor
+        and the editable file.
+    - id: c
+      text: "`backstage.io/kubernetes-id` and `github.com/project-slug`"
+      explanation: They identify workloads and a repository, not the descriptor files.
+    - id: d
+      text: "`backstage.io/techdocs-ref` only"
+      explanation: It names the documentation source.
+    correct_option: b
+    explanation: view-url and edit-url customise the links to the descriptor.
+  - id: ats071-final-s040-q1
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose a retirement path that survives the next processing pass
+    source_readings:
+    - sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+    prompt: The service `probe` is retired. Its descriptor is one of several files that
+      a `Location` entity lists. Which action retires it so that it stays retired?
+    options:
+    - id: a
+      text: Delete the entity `component:default/probe` through the catalog API.
+      explanation: The listed file still produces the entity, so it returns on the next
+        pass.
+    - id: b
+      text: Remove the target of the `probe` file from the `Location` entity.
+      explanation: Correct. The entity then loses its source. The other listed files
+        stay.
+    - id: c
+      text: 'Set `catalog.readonly: true`.'
+      explanation: This disables registering and deleting locations through the API.
+        It does not remove entities.
+    - id: d
+      text: Rename the repository of `probe`.
+      explanation: The entity reference comes from the descriptor, and a renamed repository
+        causes a fetch error.
+    correct_option: b
+    explanation: An entity stays retired only when its source no longer produces it.
+      Removing the target from the `Location` entity does that for one file.
+  - id: ats071-final-s040-q2
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Predict the effect of a global catalog.rules list that omits
+      default kinds
+    source_readings:
+    - sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+    prompt: 'A team adds `catalog.rules: [{allow: [Group, User]}]` to load organization
+      data from a tree of listed files. Afterwards every Component disappears. Why?'
+    options:
+    - id: a
+      text: Components may not be listed by a `Location` entity.
+      explanation: A `Location` entity can list files with any allowed kind.
+    - id: b
+      text: A `catalog.rules` key replaces the default list, so Component is no longer
+        allowed.
+      explanation: Correct. The new list must name every kind that stays allowed, for
+        example Component, System, API, Resource and Location.
+    - id: c
+      text: Groups and Components cannot share one catalog.
+      explanation: They share one catalog, and the rules decide which kinds enter.
+    - id: d
+      text: The processing interval is too short.
+      explanation: The interval does not decide which kinds are allowed.
+    correct_option: b
+    explanation: The global `catalog.rules` list replaces the default list. It must
+      name every kind that stays allowed.
+  - id: ats071-final-s040-q3
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read the cause of a not-found location that a Location entity
+      created
+    source_readings:
+    - sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+    prompt: The report shows a location with the status `not-found`. Its `origin` is
+      the address of a `catalog-info.yaml` and not `config`. Where is the fault?
+    options:
+    - id: a
+      text: In a target of the `Location` entity in that `catalog-info.yaml`, for example
+        a mistyped file name or branch.
+      explanation: Correct. A location with such an origin was listed by a `Location`
+        entity, so its target is wrong or the file is missing.
+    - id: b
+      text: In the `catalog.locations` list of the configuration.
+      explanation: An origin of `config` would point there. This origin is another file.
+    - id: c
+      text: In the credentials of the backend integration.
+      explanation: Credentials produce an access error. A missing file is not found.
+    - id: d
+      text: In the global `catalog.rules` list.
+      explanation: Rules apply after a successful fetch. This location failed at the
+        fetch.
+    correct_option: a
+    explanation: The origin shows which file listed the target. The fault is in that
+      target or in the missing file.
+  - id: ats071-final-s050-q1
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Tell a fetch failure from a parse failure
+    source_readings:
+    - sections/section-050/module-01/course-02-fetch-and-parse-failures.md
+    prompt: Two locations of the catalog fail. Location A has the status `not-found`.
+      Location B has the status `ok` and an error with the stage `parse` and a line
+      and column. Which statement is correct?
+    options:
+    - id: a
+      text: Both failures are repaired by editing the descriptor file.
+      explanation: Location A never returned a file, so its descriptor is not the cause.
+    - id: b
+      text: A is repaired in the location target or the access of the backend, and B
+        in the text of the file.
+      explanation: Correct. Fetch failures concern the pointer and access. Parse failures
+        concern the file text.
+    - id: c
+      text: Both failures show that the catalog backend is down.
+      explanation: Other locations are read, so the backend works.
+    - id: d
+      text: A is a parse failure and B is a fetch failure.
+      explanation: The statuses mean the opposite.
+    correct_option: b
+    explanation: The location status separates the two. A location that was not found
+      never reaches parsing.
+  - id: ats071-final-s050-q2
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find evidence that is not in the error list
+    source_readings:
+    - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+    prompt: The error list of the report is empty, but a component page shows no owner
+      and another component is missing. Which evidence should be read next?
+    options:
+    - id: a
+      text: Nothing. An empty error list proves that every entity is ingested.
+      explanation: Unresolved relations and conflicts have separate lists.
+    - id: b
+      text: The service logs of the component.
+      explanation: The component software is not part of ingestion.
+    - id: c
+      text: The unresolved relations and the conflicts, which are not part of the error
+        list.
+      explanation: Correct. An unresolved owner and an identity conflict both leave
+        the error list empty.
+    - id: d
+      text: The Kubernetes events of the cluster.
+      explanation: They are not evidence of how the catalog processed a descriptor.
+    correct_option: c
+    explanation: Relations that point at nothing and clashing identities are reported
+      separately.
+  - id: ats071-final-s050-q3
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Repair a failed ingestion at the source of truth
+    source_readings:
+    - sections/section-050/module-01/course-04-summary.md
+    prompt: A rejected descriptor has a wrong `spec.lifecycle` value. A colleague suggests
+      editing the published entity through a tool so that the page looks right. What
+      is the correct approach?
+    options:
+    - id: a
+      text: Edit the published entity, because it is what users see.
+      explanation: The next ingestion cycle replaces it, so the edit does not last.
+    - id: b
+      text: Retry the ingestion until the error disappears.
+      explanation: A malformed or invalid descriptor fails the same way every time.
+    - id: c
+      text: Delete the location and register it again.
+      explanation: The registration repeats the same pointer and the same file.
+    - id: d
+      text: Fix the descriptor file in the source repository and let the next cycle
+        ingest it.
+      explanation: Correct. The descriptor is the source of truth.
+    correct_option: d
+    explanation: Repairs belong at the source of truth. Published results are replaced
+      on every cycle.
+  - id: ats071-final-s060-q1
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose filters that remove a given repository
+    source_readings:
+    - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+    prompt: A provider must skip every repository whose name starts with sandbox-. Which
+      setting does this?
+    options:
+    - id: a
+      text: filters.repository with a regular expression that rejects names starting
+        with sandbox-
+      explanation: The repository filter is a regular expression tested against the
+        repository name.
+    - id: b
+      text: filters.branch set to sandbox
+      explanation: The branch filter selects a branch and not a repository name.
+    - id: c
+      text: schedule.timeout set to a low value
+      explanation: The timeout limits the length of a run and selects nothing.
+    - id: d
+      text: organization set to sandbox
+      explanation: The organization names the GitHub organization to scan.
+    correct_option: a
+    explanation: The repository filter matches repository names with a regular expression.
+  - id: ats071-final-s060-q2
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Judge the role of events and schedule
+    source_readings:
+    - sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+    prompt: A team wants to turn off the provider schedule because GitHub push events
+      reach the backend. What is the main problem with this plan?
+    options:
+    - id: a
+      text: Events are not supported by the GitHub module
+      explanation: The module subscribes to github.push and github.repository events.
+    - id: b
+      text: A missed event is never repaired without a scheduled run
+      explanation: Events shorten the delay, and the schedule repairs what events miss.
+    - id: c
+      text: Events can only remove entities
+      explanation: A push event refreshes the changed location.
+    - id: d
+      text: The schedule is required only for private repositories
+      explanation: The schedule is not tied to visibility.
+    correct_option: b
+    explanation: Events do not replace the schedule because a missed event needs a later
+      run to correct it.
+  - id: ats071-final-s060-q3
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Find the cause of missing provider entities
+    source_readings:
+    - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+    - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+    prompt: The report shows no provider locations at all, although the repositories
+      have valid descriptors. The provider configuration is organization starfleet,
+      filters.branch develop and the repositories use main. Which statement is correct?
+    options:
+    - id: a
+      text: A processor rejected the descriptors
+      explanation: No location exists, so no processor ran on a descriptor.
+    - id: b
+      text: The branch filter removed every repository, so the provider built no location
+      explanation: A repository that fails a filter produces no location.
+    - id: c
+      text: The stitching step lost the locations
+      explanation: Stitching happens after processing and does not create or remove
+        locations.
+    - id: d
+      text: The catalog rules block the Component kind
+      explanation: Rules apply to entities that were read, and no location was read.
+    correct_option: b
+    explanation: The branch filter excluded all repositories, so the provider produced
+      no location.

@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Find And Fix Five Ingestion Faults (LAB). Graded against the live cluster. Five descriptor and configuration faults, one per ingestion stage.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-050-01
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: scout-fetched
+      description: The scout descriptor is fetched and ingested
+      type: file
+      source: validation/validate-scout-fetched.sh
+      hint: Read the location status and the fetch error for the scout location. Compare the branch in the location URL with the branch of the repository.
+    - name: drifter-parsed
+      description: The drifter descriptor parses and is ingested
+      type: file
+      source: validation/validate-drifter-parsed.sh
+      hint: The parse error names a line and a column. Look at how YAML reads the text of that line.
+    - name: probe-valid
+      description: The probe descriptor passes entity validation and is ingested
+      type: file
+      source: validation/validate-probe-valid.sh
+      hint: The policy error quotes the rule that the metadata.name value breaks.
+    - name: bridge-dependency-resolves
+      description: The bridge dependency on telemetry-db is ingested and resolves
+      type: file
+      source: validation/validate-bridge-dependency-resolves.sh
+      hint: The telemetry-db entity is valid. Find out which rule stops it and where that rule is configured.
+    - name: shuttle-no-conflict
+      description: Each entity reference is declared by exactly one location
+      type: file
+      source: validation/validate-shuttle-no-conflict.sh
+      hint: Check the conflicts list. The shuttle repository must describe the shuttle, not another service.
+    - name: nothing-deleted
+      description: All repositories and the organization entities are still in place
+      type: file
+      source: validation/validate-nothing-deleted.sh
+      hint: Edit the descriptors and the configuration. Do not delete repositories, locations or entities to make errors disappear.
+
+teardown:
+  keepCluster: false

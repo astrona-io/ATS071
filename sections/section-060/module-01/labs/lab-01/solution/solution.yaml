@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      rules:
+        - allow: [Component, System, API, Resource, Location, Group, User]
+      locations:
+        - type: url
+          target: https://git.starfleet.example/starfleet-org/blob/main/org.yaml
+      providers:
+        github:
+          starfleetServices:
+            organization: starfleet
+            catalogPath: /catalog-info.yaml
+            filters:
+              branch: main
+              topic:
+                include: [catalog]
+                exclude: [experiment]
+              visibility: [public, internal]
+            schedule:
+              frequency: { minutes: 30 }
+              timeout: { minutes: 3 }

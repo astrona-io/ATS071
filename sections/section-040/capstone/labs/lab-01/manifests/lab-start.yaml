@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      rules:
+        - allow: [Group, User]
+      locations:
+        - type: url
+          target: https://git.starfleet.example/outpost/blob/main/catalog-info.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-registry
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Location
+    metadata:
+      name: starfleet-registry
+      description: Root of the Starfleet descriptor tree
+    spec:
+      targets:
+        - ./teams.yaml
+        - ./services.yaml
+        - https://git.starfleet.example/sensors/blob/master/catalog-info.yaml
+  teams.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: fleet-ops
+      description: Operates the fleet services
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: sensor-team
+      description: Builds the sensor array
+    spec:
+      type: team
+      children: []
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [fleet-ops]
+  services.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: helm
+      description: Steers the fleet
+    spec:
+      type: service
+      lifecycle: production
+      owner: fleet-ops
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: outpost-relay
+      description: Copy of the relay descriptor
+    spec:
+      type: service
+      lifecycle: production
+      owner: fleet-ops
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: old-sensors
+      description: Retired sensor firmware
+    spec:
+      type: service
+      lifecycle: deprecated
+      owner: sensor-team
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-outpost
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: outpost-relay
+      description: Relays messages to the outpost
+    spec:
+      type: service
+      lifecycle: production
+      owner: fleet-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-sensors
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: sensor-array
+      description: Reads the outpost sensors
+    spec:
+      type: service
+      lifecycle: production
+      owner: sensor-team

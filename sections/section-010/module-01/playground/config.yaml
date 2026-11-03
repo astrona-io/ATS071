@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Software Entities (PLAYGROUND). Starfleet descriptors in ConfigMaps and a checker that uses @backstage/catalog-model.
+# No task, no grading, no astrona submit.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-playground-010-01
+  docs:
+    guide: docs/overview.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: start-catalog-tools
+      description: Start the catalog tools and load the Starfleet descriptors
+      type: file
+      source: bootstrap/01-start-catalog-tools.sh
+
+teardown:
+  keepCluster: false

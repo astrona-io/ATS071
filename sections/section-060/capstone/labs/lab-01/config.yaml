@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Automated Ingestion Capstone (LAB). Graded against the live cluster. Fix a provider, its filters, the rules and a duplicate static location.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-060
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: services-discovered
+      description: "bridge, scout and shuttle are found by the provider and ingested"
+      type: file
+      source: validation/validate-services-discovered.sh
+      hint: "A provider location is created only for repositories that pass every filter. Compare the filters with the repository names, topics and branches."
+    - name: groups-ingested
+      description: "The teams from the crew directory are ingested and every owner resolves"
+      type: file
+      source: validation/validate-groups-ingested.sh
+      hint: "The crew directory holds Group and User entities. Check which kinds the global rules allow, then look at the unresolved relations."
+    - name: no-duplicate-claims
+      description: "scout is claimed once, by the provider location"
+      type: file
+      source: validation/validate-no-duplicate-claims.sh
+      hint: "Two locations that declare the same entity cannot both win. Decide which source should own scout and remove the other one."
+    - name: excluded-repos-not-discovered
+      description: "vault, sandbox-test, deprecated-relay and hangar-legacy are not ingested"
+      type: file
+      source: validation/validate-excluded-repos-not-discovered.sh
+      hint: "Four repositories must stay out for four different reasons, which are visibility, name, topic and branch. Use one filter for each reason."
+    - name: schedule-reasonable
+      description: "The provider runs no more often than every 15 minutes and has a timeout"
+      type: file
+      source: validation/validate-schedule-reasonable.sh
+      hint: "The schedule needs a frequency and a timeout. Write the frequency as an object such as minutes or hours."
+    - name: no-processing-errors
+      description: "The report has no errors and the catalog has all six expected entities"
+      type: file
+      source: validation/validate-no-processing-errors.sh
+      hint: "Read the errors list of the report and fix the cause of each message, not the symptom."
+    - name: provider-config-kept
+      description: "The provider keeps its organization and branch filter and all eight repositories still exist"
+      type: file
+      source: validation/validate-provider-config-kept.sh
+      hint: "Do not delete repositories and do not remove the branch filter to make the report clean."
+
+teardown:
+  keepCluster: false

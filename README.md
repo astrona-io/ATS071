@@ -2,7 +2,9 @@
 
 Certified Backstage Associate (CBA): Backstage Catalog, worth 22% of the official curriculum. This course belongs to ATP014.
 
-Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction and every module closes with a summary. Reusable YAML checks contain 5–15 questions per bank. Technical content remains draft. No labs or playgrounds are included.
+Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction, and every module has a landing page, three teaching parts, a summary, a playground and a graded lab. Every section ends with a capstone lab and a knowledge-check quiz, and the course ends with a final domain quiz. Technical content remains draft.
+
+The environment is a kind cluster that models the catalog backend: descriptors are ConfigMaps and a checker pod validates them with `@backstage/catalog-model`. It does not run Backstage. Labs and playgrounds are UNTESTED: they were built and checked statically only.
 
 ## Course Outline
 

@@ -1,0 +1,300 @@
+# Knowledge check for section-050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-050
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-050
+  title: Troubleshooting entity ingestion
+questions:
+- id: ats071-050-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Place a missing entity in the ingestion step that stopped it
+  source_readings:
+  - sections/section-050/module-01/course-01-fetching-processing-stitching-and-publication-evidence.md
+  prompt: A team adds a `catalog-info.yaml` for a new service. Two days later the
+    entity is not in the catalog. The service itself runs fine in production. What
+    is the best first move?
+  options:
+  - id: a
+    text: Restart the service, because a missing entity means the service is down.
+    explanation: The entity describes the service. The state of the service does not
+      decide whether the descriptor was ingested.
+  - id: b
+    text: 'Find the step of ingestion that stopped: the location status, then parsing,
+      then validation and rules, then relations and conflicts.'
+    explanation: Correct. Each step leaves its own evidence, so checking them in order
+      finds where the descriptor stopped.
+  - id: c
+    text: Edit the published entity directly so that it appears.
+    explanation: The published entity is a result. The next cycle replaces it, so
+      an edit does not last.
+  - id: d
+    text: Register the location again and again until it works.
+    explanation: A new registration repeats the same pointer. It does not repair a
+      wrong branch, a parse error or a validation error.
+  correct_option: b
+  explanation: Ingestion has separate steps and each failure leaves different evidence.
+    Check the steps in order and repair the source.
+- id: ats071-050-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Tell a fetch failure from a parse failure by the location status
+  source_readings:
+  - sections/section-050/module-01/course-02-fetch-and-parse-failures.md
+  prompt: The report shows a location with the status `not-found` and a fetch error.
+    The descriptor file in the repository is correct. The location URL contains `blob/master/`
+    and the repository default branch is `main`. What repairs it?
+  options:
+  - id: a
+    text: Quote every value in the descriptor file.
+    explanation: The file was never read, so its content is not the problem.
+  - id: b
+    text: Add the missing kind to the `dependsOn` entries.
+    explanation: Relations are checked after the file is read. This location was not
+      read.
+  - id: c
+    text: Change the branch in the location target to `main`.
+    explanation: Correct. A fetch failure is repaired in the pointer. The reader got
+      no file from the wrong branch.
+  - id: d
+    text: Allow the kind in `catalog.rules`.
+    explanation: Rules apply to entities that were read. No entity was read from this
+      location.
+  correct_option: c
+  explanation: A location that is not found never reaches parsing or validation. Repair
+    the target, the access of the backend or the file location.
+- id: ats071-050-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Recognize and repair a YAML parse error
+  source_readings:
+  - sections/section-050/module-01/course-02-fetch-and-parse-failures.md
+  prompt: 'A location has the status `ok`, but the report has an error with the stage
+    `parse` and the message `Nested mappings are not allowed in compact mappings at
+    line 5, column 16`. Line 5 is `description: Reaches the probe: always`. What is
+    the cause and the repair?'
+  options:
+  - id: a
+    text: The location is wrong. Change the branch.
+    explanation: The status is `ok`, so the file was read.
+  - id: b
+    text: The kind is not allowed. Add it to `catalog.rules`.
+    explanation: A rules error has the stage `rules` and needs a parsed entity.
+  - id: c
+    text: The owner group does not exist. Create the group.
+    explanation: A missing owner gives an unresolved relation. It does not cause a
+      YAML parse error.
+  - id: d
+    text: An unquoted value contains a colon and a space. Put the value in quotes.
+    explanation: Correct. YAML reads the text after the colon as a nested mapping.
+      Quoting the value makes it one string.
+  correct_option: d
+  explanation: A parse error with a line and a column points at the text of the file.
+    Quoting a value that holds a colon and a space repairs it.
+- id: ats071-050-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read a policy error on metadata.name
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: The report has an error with the stage `policy` that says `metadata.name`
+    is not valid and quotes the value `Probe Service`. How should the author repair
+    the descriptor?
+  options:
+  - id: a
+    text: Use a name with letters, digits and the separators `-`, `_` and `.`, such
+      as `probe`, and keep the readable text in `description` or `title`.
+    explanation: Correct. The name rule allows only those characters, with at most
+      63 in total.
+  - id: b
+    text: Add `Component` to `catalog.rules`.
+    explanation: The kind was not refused. The name did not pass the entity policy.
+  - id: c
+    text: Move the file to another repository.
+    explanation: The repository is not the problem. The name value is.
+  - id: d
+    text: Wrap the name in extra quotes so that the space is kept.
+    explanation: Quotes do not change the value. The space is still in the name and
+      still fails.
+  correct_option: a
+  explanation: The entity policies check the format of the name. The readable text
+    belongs in other fields.
+- id: ats071-050-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why a valid entity can be refused by the catalog rules
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: "`catalog.rules` allows `Component`, `API` and `Location`. A `Resource`
+    descriptor in a repository is valid, but the report shows an error with the stage
+    `rules` for it. A `Component` depends on this `Resource`. What is true?"
+  options:
+  - id: a
+    text: The `Resource` has a schema error. Fix `spec.type`.
+    explanation: A schema error has the stage `kind`. A `rules` error means the body
+      is valid and the kind is not allowed.
+  - id: b
+    text: The `Component` also has an error with the stage `rules`.
+    explanation: The `Component` is allowed. It stays ingested.
+  - id: c
+    text: The `Resource` is refused because its kind is not in the list. The `Component`
+      stays ingested and its `dependsOn` relation is unresolved.
+    explanation: Correct. The repair is in the configuration, if the catalog should
+      accept that kind.
+  - id: d
+    text: The catalog backend is down. Wait for the next cycle.
+    explanation: A rules refusal is stable. It happens on every cycle until the configuration
+      changes.
+  correct_option: c
+  explanation: Rules decide which kinds the catalog accepts. A refused kind also leaves
+    relations that point at it unresolved.
+- id: ats071-050-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Repair a dependsOn reference that has no kind
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: 'A `Component` is not ingested. The error has the stage `relations` and
+    says the reference `relay-db` had a missing or empty kind. The field is `spec.dependsOn:
+    [relay-db]`. What repairs it?'
+  options:
+  - id: a
+    text: Rename the Resource to `relay-db-resource`.
+    explanation: The name is fine. The reference lacks a kind.
+  - id: b
+    text: Write the full reference `resource:default/relay-db`.
+    explanation: Correct. The field accepts several kinds, so the reference must name
+      the kind.
+  - id: c
+    text: Remove `dependsOn` from every Component in the estate.
+    explanation: This destroys correct relations. Only this reference has the fault.
+  - id: d
+    text: Add `Resource` to `catalog.rules`.
+    explanation: This is not a rules error. The reference itself is malformed.
+  correct_option: b
+  explanation: A reference in a field that accepts several kinds needs the kind prefix.
+- id: ats071-050-q07
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Find an identity conflict that is not in the error list
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: The `shuttle` repository was copied from `bridge`. The `shuttle` component
+    is missing from the catalog, and the error list has no entry for the `shuttle`
+    file. The `bridge` component is ingested. Where is the evidence, and what is the
+    repair?
+  options:
+  - id: a
+    text: In the conflicts list. Both locations declare `component:default/bridge`.
+      Give the shuttle descriptor its own name.
+    explanation: Correct. The identity is the kind, the namespace and the name. A
+      conflict has its own list and the repair changes the identity.
+  - id: b
+    text: In the unresolved list. Create a group for the shuttle.
+    explanation: Unresolved relations list missing relation targets. This is a clash
+      of identity.
+  - id: c
+    text: In the location status. Change the branch of the shuttle location.
+    explanation: The shuttle file was read, so the location status is fine.
+  - id: d
+    text: Nowhere, because the error list is empty and so nothing is wrong.
+    explanation: An empty error list does not mean that all entities are ingested.
+      Conflicts have their own list.
+  correct_option: a
+  explanation: A conflict means two locations claim one reference. Changing the title
+    does not help. The wrong descriptor needs its own name.
+- id: ats071-050-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Separate a processing failure from a service outage
+  source_readings:
+  - sections/section-050/module-01/course-04-summary.md
+  prompt: A manager sees the error panel of the `probe` page and writes "the probe
+    service is down". The error says that `spec.lifecycle` is required. What is the
+    correct reading?
+  options:
+  - id: a
+    text: The probe service crashed and its descriptor was deleted.
+    explanation: The error is about the descriptor schema. It says nothing about the
+      running service.
+  - id: b
+    text: The catalog backend has an outage.
+    explanation: A schema error on one entity does not show a backend outage. Other
+      entities are ingested.
+  - id: c
+    text: The error means that the service has no owner.
+    explanation: A missing owner appears as an owner error or an open relation. This
+      error names `spec.lifecycle`.
+  - id: d
+    text: The descriptor fails the Component schema. The metadata pipeline is affected,
+      not the service. Add `lifecycle` to the descriptor.
+    explanation: Correct. A processing error describes the descriptor and its ingestion.
+  correct_option: d
+  explanation: Ingestion errors describe metadata. They are not evidence about the
+    state of the software.
+- id: ats071-050-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Diagnose an unresolved relation by looking at the target
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: All components of one team show no owner in the interface, but their descriptors
+    pass validation and are ingested. The report lists many `ownedBy` relations as
+    unresolved, all to the group `group:default/ops`. What is the most likely cause?
+  options:
+  - id: a
+    text: Every component descriptor has a typing mistake in `spec.owner`.
+    explanation: All of them name the same valid reference. A common typing mistake
+      is unlikely.
+  - id: b
+    text: The `ops` group is not ingested, for example because its location failed
+      or `Group` is not allowed by the rules.
+    explanation: Correct. Repair the group at its own location or in the rules.
+  - id: c
+    text: The components have a conflict.
+    explanation: A conflict would list references in the conflicts list, not unresolved
+      owner targets.
+  - id: d
+    text: The components must be registered again.
+    explanation: The components are fine. Registering them again repeats the same
+      state.
+  correct_option: b
+  explanation: An unresolved relation points at a target that is not ingested. Diagnose
+    the target and the reason it is missing.
+- id: ats071-050-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain where the catalog rules of a location apply
+  source_readings:
+  - sections/section-050/module-01/course-03-validation-rules-conflicts-and-unresolved-relations.md
+  prompt: A `Location` entity in an organization repository lists `./groups.yaml`.
+    The global `catalog.rules` do not allow `Group`. A static location for the organization
+    repository itself has its own rule that allows `Group`. Do the groups from `groups.yaml`
+    enter the catalog?
+  options:
+  - id: a
+    text: Yes. The rule of the static location applies to everything below it.
+    explanation: Per-location rules apply only to entities that the backend read from
+      that exact URL.
+  - id: b
+    text: Yes. A `Location` entity bypasses the rules.
+    explanation: A `Location` entity does not bypass anything.
+  - id: c
+    text: No. Entities that a `Location` entity reaches are checked against the global
+      rules, which refuse `Group`.
+    explanation: Correct. The repair is to allow `Group` in the global rules or to
+      register the groups file as its own static location with a rule.
+  - id: d
+    text: No. Groups can never be loaded from a file.
+    explanation: Groups can be loaded from files. The rules decide.
+  correct_option: c
+  explanation: Per-location rules cover only entities read from that URL. Entities
+    reached through a Location entity follow the global rules.

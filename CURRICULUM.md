@@ -22,4 +22,4 @@ The [official objectives](https://training.linuxfoundation.org/certification/cer
 | 050 / 01 | Fetching, Processing, Stitching And Publication Evidence | Fetching, Processing, Stitching And Publication Evidence |
 | 060 / 01 | Entity Providers, Discovery Scope And Repeatable Ingestion | Entity Providers, Discovery Scope And Repeatable Ingestion |
 
-AUTHORING.yaml records measurable goals and adaptation sources. Every objective retains its section ID. All technical readings remain draft. Question banks are separate from the reading manifest and follow their declared summaries. No labs, playgrounds or runtime validation are included.
+AUTHORING.yaml records measurable goals and adaptation sources. Every objective retains its section ID. All technical readings remain draft. Each module has a playground and a graded lab, each section has a capstone lab and a quiz.yaml, and sections/final-domain-quiz.yaml closes the course. Labs and playgrounds are untested on a real cluster.

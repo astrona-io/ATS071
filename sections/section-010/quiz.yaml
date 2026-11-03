@@ -1,0 +1,265 @@
+# Knowledge check for section-010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-010
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-010
+  title: Understand how/why to use Backstage Catalog
+questions:
+- id: ats071-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Identify what a catalog entity is and how an entity reference
+    is written.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: A team wants to point at the Component named `bridge` in the default namespace
+    from another descriptor. Which entity reference is correct?
+  options:
+  - id: a
+    text: bridge.default.component
+    explanation: Backstage references use the form kind:namespace/name, not dotted
+      names.
+  - id: b
+    text: component:default/bridge
+    explanation: Correct. A reference is kind, colon, namespace, slash, name.
+  - id: c
+    text: default/component/bridge
+    explanation: The kind comes first and is followed by a colon, not a slash.
+  - id: d
+    text: https://git.example/bridge
+    explanation: A repository URL is a location, not an entity reference.
+  correct_option: b
+  explanation: An entity is identified by its kind, namespace and name, written as
+    kind:namespace/name.
+- id: ats071-010-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose the right entity kind for a piece of software or infrastructure.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: A service uses a PostgreSQL database that the platform team runs. Which
+    kind describes the database?
+  options:
+  - id: a
+    text: Component
+    explanation: A Component is a unit of software, such as a service, website or
+      library.
+  - id: b
+    text: System
+    explanation: A System groups components, APIs and resources; it is not the database
+      itself.
+  - id: c
+    text: Resource
+    explanation: Correct. A Resource describes infrastructure that components depend
+      on, such as a database.
+  - id: d
+    text: API
+    explanation: An API describes an interface that a component offers, not the database.
+  correct_option: c
+  explanation: A Resource is the kind for infrastructure that software uses, and a
+    component points at it with dependsOn.
+- id: ats071-010-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain what the catalog is and is not.
+  source_readings:
+  - sections/section-010/module-01/course-01-software-entities-ownership-and-discoverable-relationships.md
+  prompt: A reader sees the lifecycle value `production` on a Component page and concludes
+    that the service is currently healthy. What is wrong with this conclusion?
+  options:
+  - id: a
+    text: The lifecycle field only accepts the value experimental.
+    explanation: Lifecycle accepts values such as experimental, production and deprecated.
+  - id: b
+    text: The field is written by an author, so it states intent and does not measure
+      runtime health.
+    explanation: Correct. The catalog holds what authors declared, not live status.
+  - id: c
+    text: Production components are always unhealthy.
+    explanation: There is no such rule.
+  - id: d
+    text: Only the Backstage backend can read lifecycle.
+    explanation: Lifecycle is ordinary descriptor data and says nothing about health.
+  correct_option: b
+  explanation: Descriptor fields are declarations. Health comes from monitoring systems.
+- id: ats071-010-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Declare an owner and predict the resulting relation.
+  source_readings:
+  - sections/section-010/module-01/course-02-ownership-and-relationships.md
+  prompt: 'A Component has `owner: starfleet-ops` in its spec and the Group `starfleet-ops`
+    exists in the catalog. What relation does the catalog derive for the Component?'
+  options:
+  - id: a
+    text: ownedBy to group:default/starfleet-ops
+    explanation: Correct. The owner field produces an ownedBy relation. The Group
+      gets the reverse ownerOf relation.
+  - id: b
+    text: partOf to group:default/starfleet-ops
+    explanation: partOf comes from the system field, not from owner.
+  - id: c
+    text: dependsOn to group:default/starfleet-ops
+    explanation: dependsOn is written in the dependsOn field and names software or
+      infrastructure.
+  - id: d
+    text: No relation, because owner is only text.
+    explanation: The owner is parsed as an entity reference and becomes a relation.
+  correct_option: a
+  explanation: spec.owner becomes an ownedBy relation, and the owning entity receives
+    the reverse ownerOf relation.
+- id: ats071-010-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose an unresolved relation.
+  source_readings:
+  - sections/section-010/module-01/course-02-ownership-and-relationships.md
+  prompt: The Component `scout` lists `bridge-apis` in `consumesApis` but the API
+    is named `bridge-api`. What does the report show?
+  options:
+  - id: a
+    text: scout is rejected because of an invalid name.
+    explanation: The name is well formed, so the entity itself is valid.
+  - id: b
+    text: bridge-api is created automatically.
+    explanation: The catalog never creates entities from references.
+  - id: c
+    text: Nothing, because relations are not checked.
+    explanation: Relations are listed and a missing target is reported.
+  - id: d
+    text: scout is valid, and the relation points at api:default/bridge-apis, which
+      does not exist.
+    explanation: Correct. The target is unresolved, so the relation leads nowhere.
+  correct_option: d
+  explanation: A reference to an entity that is not in the catalog is an unresolved
+    relation.
+- id: ats071-010-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Write a dependsOn reference correctly.
+  source_readings:
+  - sections/section-010/module-01/course-02-ownership-and-relationships.md
+  prompt: A `dependsOn` entry reads `telemetry-db` and the catalog reports an error
+    about a missing kind. What is the fix?
+  options:
+  - id: a
+    text: Write resource:default/telemetry-db.
+    explanation: Correct. dependsOn has no default kind, so the kind must be written.
+  - id: b
+    text: Move the entry to the owner field.
+    explanation: The owner field names a Group or User.
+  - id: c
+    text: Rename the Resource to bridge.
+    explanation: The name is not the problem; the reference has no kind.
+  - id: d
+    text: Delete the Resource.
+    explanation: Deleting it removes the target and leaves the problem.
+  correct_option: a
+  explanation: A dependsOn reference needs a kind because the target can be a Component
+    or a Resource.
+- id: ats071-010-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Group software with System and Domain.
+  source_readings:
+  - sections/section-010/module-01/course-02-ownership-and-relationships.md
+  prompt: Which statement about System and Domain is correct?
+  options:
+  - id: a
+    text: A Component belongs to a System with spec.system, and a System belongs to
+      a Domain with spec.domain.
+    explanation: Correct. These fields create the partOf relations.
+  - id: b
+    text: A Domain contains Components directly and has no Systems.
+    explanation: A Domain groups Systems.
+  - id: c
+    text: A System is created by the owner field.
+    explanation: A System is its own entity written in a descriptor.
+  - id: d
+    text: A Domain is required for every Component.
+    explanation: The system and domain fields are optional.
+  correct_option: a
+  explanation: System and Domain are optional grouping entities connected by partOf
+    relations.
+- id: ats071-010-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Handle two sources that create the same entity.
+  source_readings:
+  - sections/section-010/module-01/course-03-source-of-truth-freshness-and-adoption.md
+  prompt: Two files declare `component:default/bridge`. What is the right fix?
+  options:
+  - id: a
+    text: Restart the backend until the catalog picks the one you want.
+    explanation: The result depends on processing order and is not a fix.
+  - id: b
+    text: Give both files the same description.
+    explanation: The identity still conflicts.
+  - id: c
+    text: Decide which source owns the entity and remove the other declaration.
+    explanation: Correct. Each entity reference needs exactly one source.
+  - id: d
+    text: Raise the lifecycle of one file.
+    explanation: Lifecycle does not affect identity.
+  correct_option: c
+  explanation: Identity conflicts are removed by assigning one source of truth for
+    each entity.
+- id: ats071-010-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Judge catalog data freshness.
+  source_readings:
+  - sections/section-010/module-01/course-03-source-of-truth-freshness-and-adoption.md
+  prompt: A descriptor passes every check and is ingested, but its owner Group was
+    renamed a year ago and the file never changed. Which statement is right?
+  options:
+  - id: a
+    text: The catalog will fix the owner automatically.
+    explanation: The catalog does not rewrite descriptors.
+  - id: b
+    text: Successful ingestion proves the facts are current.
+    explanation: Ingestion proves the file is valid, not true.
+  - id: c
+    text: The entity is stale, and the owner relation is reported as unresolved if
+      the old Group is gone.
+    explanation: Correct. Valid data can still be wrong, and a missing owner target
+      shows as unresolved.
+  - id: d
+    text: Lifecycle must be set to deprecated.
+    explanation: Nothing says the service is deprecated.
+  correct_option: c
+  explanation: Freshness is an operating task. Teams review descriptors when code
+    changes.
+- id: ats071-010-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Choose an adoption measure for the catalog.
+  source_readings:
+  - sections/section-010/module-01/course-03-source-of-truth-freshness-and-adoption.md
+  prompt: A manager wants a single number that shows the catalog is working. Which
+    measure fits best?
+  options:
+  - id: a
+    text: The count of entities in the catalog.
+    explanation: A count measures effort, not value.
+  - id: b
+    text: The share of real tasks, such as finding an owner during an incident, that
+      the catalog answers correctly.
+    explanation: Correct. Task success shows whether the data helps people.
+  - id: c
+    text: The number of YAML files in all repositories.
+    explanation: File count says nothing about answers.
+  - id: d
+    text: The number of Groups.
+    explanation: Group count says nothing about service ownership.
+  correct_option: b
+  explanation: Value is the ability to answer real questions, so tasks are the right
+    measure.

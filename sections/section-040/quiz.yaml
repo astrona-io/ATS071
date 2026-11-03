@@ -1,0 +1,301 @@
+# Knowledge check for section-040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-040
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-040
+  title: Working with manually registered entity locations
+questions:
+- id: ats071-040-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish the two ways to register a location by hand and
+    who can remove each
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: A platform team registered the descriptor of `bridge` in the `catalog.locations`
+    list of the application configuration. A developer opens the catalog API and sends
+    a delete request for that location. What happens?
+  options:
+  - id: a
+    text: The location is deleted and the entities of `bridge` disappear.
+    explanation: A location from the static configuration is not removed through the
+      catalog API.
+  - id: b
+    text: The API refuses, because a location from the static configuration can only
+      be removed by deleting it from the configuration.
+    explanation: Correct. A static location belongs to the configuration, so the configuration
+      is the only place to remove it.
+  - id: c
+    text: The API deletes the entities but keeps the location.
+    explanation: The API does not split a location from its entities this way, and
+      it does not delete a static location.
+  - id: d
+    text: The API deletes the location only after the backend restarts.
+    explanation: A restart does not change what the API may delete. Static locations
+      cannot be deleted through the API.
+  correct_option: b
+  explanation: A location from `catalog.locations` belongs to the configuration. The
+    catalog API cannot remove it, so the person must delete it from the configuration.
+- id: ats071-040-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain that the backend integration identity fetches the descriptor,
+    not the person who registered it
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: A developer registers the URL of a descriptor in a private repository. The
+    developer can open the file in a browser. The catalog shows an error from the
+    fetch stage and no entity. What is the most likely cause?
+  options:
+  - id: a
+    text: The developer used the interface instead of the API.
+    explanation: Both ways create the same kind of location. The way of registration
+      does not cause a fetch error on a readable file.
+  - id: b
+    text: The descriptor has an invalid entity name.
+    explanation: An invalid name is a validation error in a later stage, not a fetch
+      error.
+  - id: c
+    text: The `catalog.rules` list does not allow `Component`.
+    explanation: A rule refusal is reported in the rules stage, after the fetch succeeded.
+  - id: d
+    text: The credentials of the backend integration cannot read the private repository.
+    explanation: Correct. The backend fetches the file with the integration credentials.
+      The browser access of the developer proves nothing about them.
+  correct_option: d
+  explanation: The catalog backend fetches the file with the credentials of its source
+    control integration. The access of the developer in a browser is a different identity.
+- id: ats071-040-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Interpret a registration as an input that is accepted before
+    the entity is published
+  source_readings:
+  - sections/section-040/module-01/course-01-registered-locations-source-access-and-entity-lifecycle.md
+  prompt: A location is registered and the interface shows that the registration worked.
+    An hour later no entity exists. What should the author do first?
+  options:
+  - id: a
+    text: Read the processing status and the error of the location to find the stage
+      that failed.
+    explanation: Correct. Registration only records an input. The error of the fetch,
+      validation, rules or relation stage explains the missing entity.
+  - id: b
+    text: Register the same address again to trigger a new read.
+    explanation: A second registration of the same address repeats the same failure
+      and does not give new evidence.
+  - id: c
+    text: Delete the location and register it through the static configuration.
+    explanation: The way of registration is not the problem. This hides the evidence
+      and fixes nothing.
+  - id: d
+    text: Wait for the next restart of the backend.
+    explanation: A restart does not repair a failing source. A persistent delay needs
+      evidence.
+  correct_option: a
+  explanation: Registration is only an input. The status and the error show which
+    stage failed, and the repair belongs to that stage.
+- id: ats071-040-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Resolve a relative target of a Location entity
+  source_readings:
+  - sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+  prompt: 'The file `catalog-info.yaml` at `https://git.starfleet.example/fleet-registry/blob/main/catalog-info.yaml`
+    holds a `Location` entity with `spec.targets: [./cargo.yaml]`. Which address does
+    the catalog read for the target?'
+  options:
+  - id: a
+    text: "`https://git.starfleet.example/cargo.yaml`"
+    explanation: A relative path resolves against the file that holds the entity,
+      not against the host.
+  - id: b
+    text: "`https://git.starfleet.example/fleet-registry/blob/main/cargo.yaml`"
+    explanation: Correct. The relative path resolves against the address of the file
+      with the `Location` entity.
+  - id: c
+    text: The path is read from the root of the repository on the default branch of
+      the first registered location.
+    explanation: The base is the file that holds the entity, not another location.
+  - id: d
+    text: No address, because a `Location` entity may only have absolute targets.
+    explanation: A `Location` entity accepts relative and absolute targets.
+  correct_option: b
+  explanation: A relative target resolves against the address of the file that holds
+    the `Location` entity.
+- id: ats071-040-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose between a per-location rule and the global catalog.rules
+  source_readings:
+  - sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+  prompt: "`org.yaml` has Group entities. It is registered in `catalog.locations`
+    and no `catalog.rules` key exists. The groups are refused with a rules error.
+    Which change allows them and affects only that file?"
+  options:
+  - id: a
+    text: 'Add `rules: [{allow: [Group]}]` to the registered location of `org.yaml`.'
+    explanation: Correct. A `rules` list on a static location adds allowed kinds for
+      the file at that location only.
+  - id: b
+    text: 'Add `catalog.rules: [{allow: [Group]}]` at the top.'
+    explanation: This replaces the default list for every location, so Components
+      stop being allowed.
+  - id: c
+    text: 'Change `kind: Group` to `kind: Component` in the file.'
+    explanation: This changes what the entities are and breaks their meaning. It does
+      not fix the rule.
+  - id: d
+    text: Move `org.yaml` into the repository of a `Location` entity.
+    explanation: Files that a `Location` entity lists use the global rules only, so
+      this makes it worse.
+  correct_option: a
+  explanation: A `rules` key on a static location adds allowed kinds for the file
+    at that location only. The global `catalog.rules` key replaces the default list.
+- id: ats071-040-q06
+  type: single_choice
+  difficulty: advanced
+  learning_objective: State which rules apply to files reached through a Location
+    entity
+  source_readings:
+  - sections/section-040/module-01/course-02-location-entities-rules-and-removing-a-registration.md
+  prompt: 'A root file is registered with `rules: [{allow: [Group]}]`. Its `Location`
+    entity lists `teams.yaml`, which has Group entities. There is no `catalog.rules`
+    key. What is the result for the groups?'
+  options:
+  - id: a
+    text: They are allowed, because the rule is on the root location.
+    explanation: The rule on the root applies to entities read from the root file
+      only.
+  - id: b
+    text: They are allowed once the backend processes the root file a second time.
+    explanation: Another pass does not change which rules apply.
+  - id: c
+    text: They are refused, because entities from a file that a `Location` entity
+      lists use only the global rules, and the default list has no Group.
+    explanation: Correct. The per-location rule does not reach the listed file.
+  - id: d
+    text: They are refused, but the Components in the same file are allowed.
+    explanation: Components follow the same global rules. The defaults allow Component,
+      and the file has no Components in this case.
+  correct_option: c
+  explanation: A per-location rule covers the registered file only. Listed files use
+    the global rules, and the default list does not allow Group.
+- id: ats071-040-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why deleting a published entity does not retire software
+    that its source still produces
+  source_readings:
+  - sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+  prompt: A team deletes the entity `component:default/probe` in the interface. The
+    descriptor and its registered location are unchanged. A few minutes later the
+    entity is back. Why?
+  options:
+  - id: a
+    text: The interface keeps a deleted entity for a few minutes.
+    explanation: The catalog does not delay deletion. The entity returns because it
+      is published again.
+  - id: b
+    text: The catalog restores deleted entities from a backup.
+    explanation: The catalog does not restore from a backup. It processes the source
+      again.
+  - id: c
+    text: The location is a duplicate of another one.
+    explanation: A duplicate declaration causes a conflict, not a return after deletion.
+  - id: d
+    text: The registered location still produces the entity, so the next processing
+      pass publishes it again.
+    explanation: Correct. The published entity is a copy of its source. Retire the
+      software in the descriptor or the registration.
+  correct_option: d
+  explanation: A parent that still maintains an entity publishes it again on the next
+    pass. Retire software at the source.
+- id: ats071-040-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe orphans and the orphan strategy
+  source_readings:
+  - sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+  prompt: A registration is removed from the configuration. Its entities lose their
+    parent. With no `catalog.orphanStrategy` setting, what does the catalog do?
+  options:
+  - id: a
+    text: It keeps the orphans and marks them with `backstage.io/orphan` until someone
+      deletes them.
+    explanation: 'That is the behavior of `orphanStrategy: keep`, not the default.'
+  - id: b
+    text: It removes the orphaned entities automatically.
+    explanation: Correct. The default behavior is to remove orphaned entities. The
+      setting `keep` changes that.
+  - id: c
+    text: It moves the entities to another location.
+    explanation: The catalog does not move entities between locations.
+  - id: d
+    text: It stops the processing of every other entity.
+    explanation: An orphan does not affect other entities.
+  correct_option: b
+  explanation: 'By default the catalog removes orphaned entities. With `catalog.orphanStrategy:
+    keep`, it keeps them with the `backstage.io/orphan` annotation.'
+- id: ats071-040-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: State what a missing source file does to its entities
+  source_readings:
+  - sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+  prompt: A developer renames `catalog-info.yaml` in a repository that a location
+    still points at. What does the catalog treat this as?
+  options:
+  - id: a
+    text: A normal retirement, so the entities are orphans and are removed.
+    explanation: Removing or breaking a file does not orphan its entities. They still
+      have a parent.
+  - id: b
+    text: A new registration of the renamed file.
+    explanation: Renaming a file does not register anything.
+  - id: c
+    text: A read error on the location that the owner needs to fix, not a retirement.
+    explanation: Correct. A missing file is an error to repair, and it does not orphan
+      the entities.
+  - id: d
+    text: A conflict with the renamed file.
+    explanation: A conflict needs two declarations of one entity reference.
+  correct_option: c
+  explanation: A missing or unreadable file does not orphan its entities. The catalog
+    reports the read error, and the owner repairs the address or the file.
+- id: ats071-040-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose a conflict between two declarations of one entity reference
+  source_readings:
+  - sections/section-040/module-01/course-03-entity-lifecycle-orphans-rediscovery-and-conflicts.md
+  prompt: Two registered files both declare a Component named `bridge` in the default
+    namespace. The report shows a conflict. What is the correct repair?
+  options:
+  - id: a
+    text: Register both files again so that each one is read twice.
+    explanation: More registrations do not give two entities the same reference.
+  - id: b
+    text: Rename the file that the catalog read second.
+    explanation: The file name is not the entity name. The reference comes from the
+      descriptor.
+  - id: c
+    text: Raise the processing interval of the catalog.
+    explanation: The interval changes how often files are read, not which declaration
+      wins.
+  - id: d
+    text: Remove the declaration that should not own the entity, so one source keeps
+      it.
+    explanation: Correct. An entity reference is unique, so only one location can
+      maintain it. Remove the extra declaration.
+  correct_option: d
+  explanation: An entity reference is unique. Decide which source owns the entity
+    and remove the other declaration.

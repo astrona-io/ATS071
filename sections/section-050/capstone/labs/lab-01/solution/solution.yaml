@@ -1,0 +1,128 @@
+# Reference solution: full replacement ConfigMaps for every ConfigMap the solution changes.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog-config
+  namespace: catalog-source
+data:
+  app-config.yaml: |
+    catalog:
+      rules:
+        - allow: [Component, System, API, Resource, Group, User, Location]
+      locations:
+        - type: url
+          target: https://git.starfleet.example/outpost-org/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/beacon/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/relay/blob/main/catalog-info.yaml
+        - type: url
+          target: https://git.starfleet.example/sensor/blob/main/catalog-info.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-outpost-org
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Location
+    metadata:
+      name: outpost-org
+      description: Groups and users of the outpost
+    spec:
+      targets:
+        - ./groups.yaml
+        - ./users.yaml
+  groups.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: outpost-ops
+    spec:
+      type: team
+      children: [drifters]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Group
+    metadata:
+      name: drifters
+    spec:
+      type: team
+      parent: outpost-ops
+      children: []
+  users.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: User
+    metadata:
+      name: kira
+    spec:
+      memberOf: [outpost-ops]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-beacon
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: beacon
+      description: Sends position reports
+    spec:
+      type: service
+      lifecycle: production
+      owner: outpost-ops
+      providesApis: [beacon-api]
+      dependsOn: [resource:default/relay-db]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: API
+    metadata:
+      name: beacon-api
+    spec:
+      type: openapi
+      lifecycle: production
+      owner: outpost-ops
+      definition: "openapi: 3.0.0"
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: Resource
+    metadata:
+      name: relay-db
+    spec:
+      type: database
+      owner: outpost-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-relay
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: relay
+      description: Forwards position reports
+      labels:
+        team: outpost-ops
+    spec:
+      type: service
+      lifecycle: production
+      owner: drifters
+      providesApis: [relay-api]
+    ---
+    apiVersion: backstage.io/v1alpha1
+    kind: API
+    metadata:
+      name: relay-api
+    spec:
+      type: openapi
+      lifecycle: production
+      owner: drifters
+      definition: "openapi: 3.0.0"

@@ -1,6 +1,6 @@
 # Primary Authoring Sources
 
-[Official CBA objectives](https://training.linuxfoundation.org/certification/certified-backstage-associate-cba/) checked on 2026-10-11. The examination is multiple-choice. These primary references support author review; learner pages are self-contained. Adaptation paths are recorded per reading in AUTHORING.yaml. No runtime or command-output validation is claimed.
+[Official CBA objectives](https://training.linuxfoundation.org/certification/certified-backstage-associate-cba/) checked on 2026-10-11. The examination is multiple-choice. These primary references support author review; learner pages are self-contained. Adaptation paths are recorded per reading in AUTHORING.yaml. Labs and playgrounds are built from static checks only; no runtime validation is claimed.
 
 - [Framework overview](https://backstage.io/docs/overview/what-is-backstage/)
 - [Architecture](https://backstage.io/docs/overview/architecture-overview/)
@@ -24,7 +24,7 @@
 - [Material UI compatibility](https://backstage.io/docs/tutorials/migrate-to-mui5/)
 - [Current UI migration direction](https://backstage.io/docs/ai/well-known-skills/)
 
-Version-specific fields and options need confirmation against the intended deployed release before adding executable material. Configuration excerpts illustrate intent and do not claim installation or runtime results. Question banks are independently authored practice, not official examination items.
+Version-specific fields and options need confirmation against the intended deployed release before adding executable material. Configuration excerpts illustrate intent and do not claim installation or runtime results. Quizzes are independently authored practice, not official examination items.
 
 - [TypeScript checking and emission](https://www.typescriptlang.org/docs/handbook/2/basic-types.html)
 - [React effects and lifecycle](https://react.dev/learn/synchronizing-with-effects)

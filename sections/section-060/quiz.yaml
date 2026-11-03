@@ -1,0 +1,279 @@
+# Knowledge check for section-060. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
+schema_version: 1
+kind: question_bank
+id: ats071-060
+course_id: ATS071
+exam_code: CBA
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-060
+  title: Working with automated ingestion
+questions:
+- id: ats071-060-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Distinguish entity providers from processors
+  source_readings:
+  - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+  prompt: A team sets up a new source system. Entities from it never appear in the
+    catalog, and no location for them exists in the report. Which component is the
+    first place to investigate?
+  options:
+  - id: a
+    text: A processor that validates the entities
+    explanation: A processor works on entities that already entered the catalog. Without
+      a location or an entity, there is nothing for it to validate.
+  - id: b
+    text: The stitching step that builds the final entity
+    explanation: Stitching runs after processing. It cannot be the cause when no location
+      or entity exists.
+  - id: c
+    text: The entity provider or the location configuration
+    explanation: A provider is the source of entities. When no location exists, the
+      provider or its configuration produced no input.
+  - id: d
+    text: The entity page in the Backstage interface
+    explanation: The interface shows what the catalog holds. It does not decide what
+      enters the catalog.
+  correct_option: c
+  explanation: A provider creates input for the catalog, so a missing location points
+    at the provider configuration.
+- id: ats071-060-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Read a GitHub discovery provider entry
+  source_readings:
+  - sections/section-060/module-01/course-01-entity-providers-discovery-scope-and-repeatable-ingestion.md
+  prompt: A provider entry under catalog.providers.github has the id starfleetServices,
+    the organization starfleet and no catalogPath. Which file does the provider read
+    in each repository?
+  options:
+  - id: a
+    text: "/catalog-info.yaml, which is the default"
+    explanation: The default catalogPath of the GitHub discovery provider is /catalog-info.yaml.
+  - id: b
+    text: "/app-config.yaml"
+    explanation: That file is the Backstage application configuration and not a descriptor.
+  - id: c
+    text: Every YAML file in the repository
+    explanation: Only a glob such as /**/*.yaml reads many files, and it has to be
+      configured.
+  - id: d
+    text: None, because the path is required
+    explanation: The path is optional and has a default.
+  correct_option: a
+  explanation: Without catalogPath the provider reads /catalog-info.yaml.
+- id: ats071-060-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict which repositories a filter set discovers
+  source_readings:
+  - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+  prompt: The filters are topic.include [catalog] and topic.exclude [experiment].
+    The repository probe has the topics catalog and experiment. What happens to probe?
+  options:
+  - id: a
+    text: The provider discovers it because it has the topic catalog
+    explanation: Inclusion alone would pass it, but the exclusion list is checked
+      as well.
+  - id: b
+    text: The provider discovers it and the catalog marks it experimental
+    explanation: The provider does not add lifecycle values. It only decides whether
+      a repository is in scope.
+  - id: c
+    text: The provider reports an error because the filters contradict each other
+    explanation: The filters do not contradict. Exclusion has a defined priority.
+  - id: d
+    text: The provider skips it because exclusion wins over inclusion
+    explanation: A repository with any excluded topic is skipped even when it has
+      an included topic.
+  correct_option: d
+  explanation: Topic exclusion has priority over topic inclusion.
+- id: ats071-060-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain how repository metadata changes the catalog
+  source_readings:
+  - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+  prompt: Nobody changes the provider configuration, yet a service appears in the
+    catalog. A maintainer had changed the repository visibility from private to internal,
+    and the filter lists public and internal. What explains this?
+  options:
+  - id: a
+    text: The provider reads repository metadata, so the repository now passes the
+      visibility filter
+    explanation: Filters are tested against the metadata of each repository. A change
+      at the source changes the result.
+  - id: b
+    text: The catalog copied the repository from a cache
+    explanation: The provider evaluates the filters on each run. No cache of private
+      repositories exists.
+  - id: c
+    text: The visibility filter is ignored by the provider
+    explanation: Visibility is a real filter with the values public, internal and
+      private.
+  - id: d
+    text: A processor changed the entity visibility
+    explanation: Processors do not decide which repositories are discovered.
+  correct_option: a
+  explanation: Provider scope follows repository metadata, so a visibility change
+    at the source changes the catalog.
+- id: ats071-060-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Design a safe discovery scope
+  source_readings:
+  - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+  prompt: A platform team wants repositories to appear in the catalog only when their
+    owners are ready. Which provider setting gives the owners control?
+  options:
+  - id: a
+    text: A repository regular expression that matches every name
+    explanation: That setting takes every repository, including the ones that are
+      not ready.
+  - id: b
+    text: A schedule with a short frequency
+    explanation: The schedule sets how often the provider runs. It does not choose
+      repositories.
+  - id: c
+    text: A token with administrator rights
+    explanation: A broad credential widens what the backend can read. It does not
+      give owners control.
+  - id: d
+    text: A topic include filter with a topic that owners add when ready
+    explanation: A topic is metadata that the owner of a repository controls, so it
+      works as an opt-in.
+  correct_option: d
+  explanation: An include topic that owners add is an opt-in controlled by the repository
+    owner.
+- id: ats071-060-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify credential placement and limits
+  source_readings:
+  - sections/section-060/module-01/course-02-discovery-filters-and-scope.md
+  prompt: Where must the token or GitHub App credential for discovery be stored?
+  options:
+  - id: a
+    text: In the protected backend configuration under integrations
+    explanation: The credential belongs in server configuration that readers of the
+      catalog cannot see.
+  - id: b
+    text: In an annotation of the Component, so plugins can read it
+    explanation: Annotations are visible to everyone who can read the entity.
+  - id: c
+    text: In the catalog-info.yaml of each repository
+    explanation: Descriptors are source files that many people can read.
+  - id: d
+    text: In the provider filters
+    explanation: Filters select repositories. They hold no credential.
+  correct_option: a
+  explanation: Credentials stay in protected backend configuration, never in descriptors
+    or annotations.
+- id: ats071-060-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Reason about schedule frequency and rate limits
+  source_readings:
+  - sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+  prompt: A provider scans 100 repositories and makes one request for each on every
+    refresh. The frequency is changed from 30 minutes to 20 seconds. What is the most
+    likely result?
+  options:
+  - id: a
+    text: Entities are always fresh and the cost is the same
+    explanation: The cost grows with every run. The provider sends 100 requests per
+      run.
+  - id: b
+    text: The provider can exceed the GitHub request limit and later runs fail
+    explanation: At 180 runs an hour the provider makes about 18,000 requests, above
+      the limit of 5,000 per hour.
+  - id: c
+    text: GitHub sends fewer events
+    explanation: Events do not depend on the provider frequency.
+  - id: d
+    text: The timeout is raised automatically
+    explanation: The timeout is a separate setting and does not change by itself.
+  correct_option: b
+  explanation: A very short frequency multiplies the requests and can exhaust the
+    hourly rate limit.
+- id: ats071-060-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain the risk of a full mutation after a failed run
+  source_readings:
+  - sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+  prompt: A provider sends a full mutation after a run in which half of its page requests
+    failed. What happens to the entities from the pages that failed?
+  options:
+  - id: a
+    text: They stay, because a full mutation only adds entities
+    explanation: A full mutation replaces everything the provider owns.
+  - id: b
+    text: They are removed, because a full mutation drops what it leaves out
+    explanation: The catalog treats missing entities as removed, so a partial list
+      can delete live entities.
+  - id: c
+    text: They are moved to the orphan state and kept forever
+    explanation: Orphans are removed by default unless the strategy is set to keep.
+  - id: d
+    text: They are refreshed from the previous run by the stitcher
+    explanation: The stitcher builds final entities. It does not restore missing input.
+  correct_option: b
+  explanation: A full mutation replaces the whole set, so an incomplete result removes
+    the missing entities.
+- id: ats071-060-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Resolve a duplicate between a provider and a static location
+  source_readings:
+  - sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+  prompt: After enabling discovery, the report shows a conflict for component:default/scout.
+    A static location reads legacy-info.yaml and the provider reads catalog-info.yaml.
+    Both declare scout. What is the correct fix?
+  options:
+  - id: a
+    text: Change the description in one file
+    explanation: A different description does not change the identity of the entity.
+  - id: b
+    text: Rename the provider id
+    explanation: The provider id does not affect a claim by another location.
+  - id: c
+    text: Choose one source as the owner and remove the other location
+    explanation: An entity needs one owner source, so the duplicate location must
+      go.
+  - id: d
+    text: Raise the schedule frequency
+    explanation: The schedule does not resolve a duplicate claim.
+  correct_option: c
+  explanation: Two sources cannot own the same entity. Remove one of them.
+- id: ats071-060-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Decide what happens to entities when a provider is no longer
+    configured
+  source_readings:
+  - sections/section-060/module-01/course-03-schedules-updates-and-overlapping-sources.md
+  prompt: A team deletes a provider entry from the configuration. The backend uses
+    its default settings. What happens to the entities that the provider created?
+  options:
+  - id: a
+    text: They are removed, because entities of a provider that is no longer configured
+      are removed by default
+    explanation: The setting catalog.orphanProviderStrategy defaults to removing them.
+  - id: b
+    text: They stay forever because the catalog never deletes entities
+    explanation: Automatic removal exists. The strategy can be set to keep.
+  - id: c
+    text: They are copied to a static location
+    explanation: The backend does not create locations for them.
+  - id: d
+    text: They turn into Location entities
+    explanation: The kind of an entity does not change.
+  correct_option: a
+  explanation: By default entities of an unconfigured provider are removed. Set the
+    strategy to keep to retain them.

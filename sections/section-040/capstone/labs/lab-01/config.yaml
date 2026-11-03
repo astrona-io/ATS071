@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Register An Estate (LAB). Graded against the live cluster. Register a root Location, fix the rules, a conflict and a retirement.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-040
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: registry-registered
+      description: "The root Location of the registry repository is registered and read"
+      type: file
+      source: validation/validate-registry-registered.sh
+      hint: "A Location entity only matters once something registers the file that holds it. Add the root file to catalog.locations."
+    - name: groups-ingested
+      description: "The groups and the user from the teams file are ingested"
+      type: file
+      source: validation/validate-groups-ingested.sh
+      hint: "Entities reached through a Location entity are checked against the global catalog.rules only."
+    - name: components-allowed
+      description: "The components of the services file are ingested and Component is still allowed"
+      type: file
+      source: validation/validate-components-allowed.sh
+      hint: "Setting catalog.rules replaces the default list. Name every kind that must stay allowed."
+    - name: sensors-fetched
+      description: "The sensor-array Component is ingested from its absolute target"
+      type: file
+      source: validation/validate-sensors-fetched.sh
+      hint: "An absolute target in a Location entity must use the branch of the repository."
+    - name: no-conflicts
+      description: "No entity is claimed by two locations"
+      type: file
+      source: validation/validate-no-conflicts.sh
+      hint: "Two files declare the same entity reference. Decide which file owns it and remove the other declaration."
+    - name: relay-from-outpost
+      description: "outpost-relay is ingested from the outpost repository"
+      type: file
+      source: validation/validate-relay-from-outpost.sh
+      hint: "Keep the descriptor in the repository of the service. Remove the copy."
+    - name: old-sensors-retired
+      description: "old-sensors is gone and the rest of the services file remains"
+      type: file
+      source: validation/validate-old-sensors-retired.sh
+      hint: "Retire software by changing its descriptor source. The registered locations stay."
+    - name: estate-intact
+      description: "Every repository still exists, the outpost location is kept and no relation is unresolved"
+      type: file
+      source: validation/validate-estate-intact.sh
+      hint: "This check passes at the start. Do not delete repositories or the outpost registration."
+
+teardown:
+  keepCluster: false

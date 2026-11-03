@@ -5,25 +5,126 @@ exam_objectives:
 ---
 # Annotation Contracts And External Identity Mapping
 
-Annotations attach named metadata to a catalog entity. They are commonly used to connect the entity to documentation, source systems or plugin-specific external resources. The annotation key identifies the contract, and its string value carries the identifier or other data expected by that contract. Meaning comes from the installed plugin or processor that consumes the key, not from YAML syntax alone.
+A catalog entity describes a piece of software, but the software lives in many other systems: a source repository, a documentation site, a build service, a Kubernetes cluster, a paging tool. The catalog does not copy data from those systems. It stores a short pointer to each one. That pointer is an annotation. This part explains what an annotation is, how a plugin turns it into a request to an external system, and why a pointer can be well formed and still wrong.
 
-Annotations differ from labels and core specification fields. Labels support relatively small classification values and filtering. Kind-specific fields such as a Component's owner describe the core entity model. An annotation can carry a plugin-specific locator that does not belong in that model. Choosing the right place for information keeps catalog behavior understandable and avoids inventing unsupported specification fields.
+## What an annotation is
 
-Consider a build-status card associated with a Component. The card may expect an annotation naming a particular external project. The backend integration uses that identifier to request the project's information. The correct value is therefore the external identity expected by the plugin, not the Component's display title unless the contract explicitly says they coincide. Two systems can name the same service differently.
+An annotation is one entry in the `metadata.annotations` map of an entity. The key is a name and the value is a string. The key names a contract, which is an agreement about what the value means. For example, the key `github.com/project-slug` is an agreement that the value is `<owner>/<repository>` and names a GitHub repository.
 
-A successful response does not prove that the mapping is correct. If the annotation points at another team's build project, the integration can return perfectly valid status for the wrong software. This is a semantic identity failure. Useful review checks the entity reference, annotation key, value format and external target together rather than looking only for network errors.
+The YAML file does not say what the key means. Meaning comes from the code that reads the key. That code is a frontend plugin (a card or a tab in the Backstage web application), a backend plugin that serves data to that card, or a catalog processor (code in the catalog backend that reads and changes entities while it ingests them). If no installed code reads a key, the annotation is stored and shown in the raw entity, and nothing else happens.
 
-Some annotations are supplied or normalized during ingestion. For example, source-location information can help processors and integrations understand where an entity originated. A manually authored value can interact with derived metadata, depending on the consumer. Authors should identify whether a key is intended for direct authoring, processing output or a particular plugin. Copying every annotation from another entity can carry an unrelated external identity into the new record.
+Here is the first real example. The `bridge` descriptor in the playground has this metadata:
 
-Annotations do not supply authorization. The backend still needs an approved credential and permission to read or act on the external target. A user seeing a project identifier in the catalog does not gain access to that project. Similarly, putting a token into an annotation would expose it as catalog metadata rather than creating a safe authentication mechanism.
+```yaml
+metadata:
+  name: bridge
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: starfleet-org/bridge
+    backstage.io/kubernetes-id: bridge
+```
 
-Key naming helps avoid collisions. Widely used contracts often have domain-qualified names so independent plugins can distinguish their metadata. Organization-specific annotations should also use clear namespaces and documented semantics. Reusing a known key with a different meaning makes installed consumers behave unpredictably because they still interpret the original contract.
+The first key tells the documentation plugin where the documentation source is. The second tells the GitHub plugins which repository to ask about. The third tells the Kubernetes plugin which workloads belong to this component. Three keys, three different consumers, one entity.
 
-Change management needs to follow the consumer. A plugin upgrade can introduce a new accepted format or deprecate an older mapping. The annotation should be reviewed against the version of that plugin installed in the application. Schema validation may accept a string even when the plugin cannot interpret its content. This is another reason to distinguish envelope validity from integration correctness.
+## How a plugin uses the value
 
-A practical diagnostic sequence begins with the entity actually shown in the interface. Confirm that it is the expected kind, namespace and name. Then inspect the annotation consumed by the card, identify the external object it names and determine whether the server identity may access that object. This follows the entire metadata join without assuming that a blank card always means a broken catalog.
+A plugin does not search the catalog for the right repository. It receives an entity, reads one named annotation and uses the string. The flow for a build-status card looks like this.
+
+```mermaid
+flowchart TB
+    U["Browser"] -->|"opens entity page"| F["Frontend card"]
+    F -->|"reads annotation"| E["Entity: bridge"]
+    F -->|"asks with the value"| B["Backend plugin"]
+    B -->|"authenticated request"| X["External system"]
+    X -->|"data for that object"| B
+    B -->|"response"| F
+```
+
+The diagram shows that the annotation value is only an identifier: the backend plugin uses its own credential to call the external system, and the card shows whatever comes back.
+
+Notice what the catalog does in this flow: it only stores the string. It does not check that the repository exists, that the value has the right shape for the plugin, or that the object belongs to this component. Those checks, if any, belong to the plugin.
+
+## Try it: read the annotations
+
+<!-- astrona:playground:renew -->
+
+Define the `inspect_catalog` helper from the playground guide if your terminal is new. It sends the ConfigMaps in `catalog-source` to the checker pod and filters the report with `jq`. Print the annotations of every Component:
+
+```sh
+inspect_catalog -c '.entities[] | select(.kind == "Component") | {ref, annotations: .metadata.annotations}'
+```
+
+Each Component appears with its map. `bridge` has six annotations that you wrote or that the playground set. Every entity also has `backstage.io/managed-by-location`, which the checker adds the way the catalog backend does. Look at `scout`. Its `github.com/project-slug` is `starfleet-org/bridge`, and its `backstage.io/kubernetes-id` is `bridge`. The `scout` descriptor lives in the repository `scout`, so both values point at a different component.
+
+## A valid value for the wrong object
+
+Run the checker for errors:
+
+```sh
+inspect_catalog -c '.errors, .summary.errorCount'
+```
+
+The list is empty and the count is `0`. The catalog accepts `scout` because both values are strings and both keys are well formed. A GitHub card on the `scout` page would still show the pull requests of the `bridge` repository. The Kubernetes tab would list the `bridge` pods. Nothing fails, and every number on the page is real, but it belongs to another component.
+
+This is a semantic identity failure. The value passes the format check and fails the meaning check. The only way to find it is to compare three things together: the entity, the annotation key and the external object the value names. When a card shows data that looks plausible but wrong, check the annotation before you suspect the plugin.
+
+## Fix the mapping
+
+Save this ConfigMap as `repo-scout.yaml`. It replaces the two copied values:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repo-scout
+  namespace: catalog-source
+data:
+  catalog-info.yaml: |
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: scout
+      description: Website that shows scan results
+      annotations:
+        github.com/project-slug: starfleet-org/scout
+        backstage.io/kubernetes-id: scout
+    spec:
+      type: website
+      lifecycle: experimental
+      owner: scout-team
+```
+
+Apply it:
+
+```sh
+kubectl apply -f repo-scout.yaml
+```
+
+Then check the result:
+
+```sh
+inspect_catalog -c '.entities[] | select(.ref == "component:default/scout") | .metadata.annotations'
+```
+
+The two values now name `scout`. The checker cannot tell you that the repository `starfleet-org/scout` exists on GitHub. It only shows that the string in the descriptor changed. In a real installation you confirm the target in the external system.
+
+## Annotations are not permissions
+
+An annotation value gives nobody access. When a user opens a page, the backend plugin calls the external system with its own configured credential. If that credential cannot read the repository, the card shows an error, whatever the annotation says. If the credential can read it, every user who can open the entity page can see the card.
+
+Two consequences follow. A user who sees an identifier in the catalog does not gain access to the object it names. And a secret placed in an annotation is not protected: the annotation is part of the entity, and the entity is readable by anyone who can read the catalog. Authentication belongs in the backend configuration, never in descriptors.
+
+## Names, prefixes and who owns a key
+
+Keys that are meant to be shared use a domain prefix, as in `github.com/project-slug`, so independent plugins cannot collide. Keys with the prefix `backstage.io/` are reserved for Backstage itself. An organization that defines its own keys uses its own domain, for example `example.com/pager-enabled`, and documents what the value means.
+
+Reusing a known key for a different meaning is a mistake. An installed plugin still reads the key with its original contract, so a repurposed key produces wrong data on pages you did not touch. Copying all annotations from another entity has the same effect: it copies external identities that belong to someone else.
+
+## What you can now do
+
+An annotation is a named string that a plugin reads to find an external object. The catalog stores it and checks only its format. The value can be well formed and still wrong, and it never grants access to the object. The next question is where information belongs when the same entity can also carry labels, tags and spec fields.
 
 ## Common pitfalls
 
 > [!WARNING]
-> An annotation is metadata, not a secret store or permission grant. A valid string can identify the wrong external object. Avoid copied identifiers, unsupported keys and assumptions that the catalog's display name matches an integration's canonical identity.
+> A valid annotation can still point at the wrong external object, because the catalog does not check the target. Never copy annotations from another entity without changing every identifier. Never store a token or password in an annotation: it is readable catalog metadata, not a credential store.

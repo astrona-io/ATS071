@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Annotations Capstone (LAB). Graded against the live cluster. Repair and complete annotations across four descriptor repositories.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-capstone-030
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: probe-annotation-key
+      description: The probe Component is ingested and keeps its on-call link under a valid key
+      type: file
+      source: validation/validate-probe-annotation-key.sh
+      hint: Read the policy error in the inspector report. Annotation keys have a format.
+    - name: probe-no-secret
+      description: No annotation on the probe Component holds a password
+      type: file
+      source: validation/validate-probe-no-secret.sh
+      hint: Annotations are visible catalog metadata and never a place for credentials.
+    - name: bridge-slug-format
+      description: The bridge project slug uses the owner/repository format
+      type: file
+      source: validation/validate-bridge-slug-format.sh
+      hint: The value is a path of two parts, not a web address.
+    - name: scout-docs-and-source
+      description: The scout Component declares its TechDocs source and a source location
+      type: file
+      source: validation/validate-scout-docs-and-source.sh
+      hint: Both values are location references. Check how a folder reference must end.
+    - name: shuttle-own-identity
+      description: The shuttle Component carries its own identity annotations
+      type: file
+      source: validation/validate-shuttle-own-identity.sh
+      hint: Three values were copied from another component. Each must name shuttle.
+    - name: shuttle-lifecycle-in-spec
+      description: The shuttle lifecycle is a spec field, not an annotation
+      type: file
+      source: validation/validate-shuttle-lifecycle-in-spec.sh
+      hint: Check the kind error for shuttle. Required data belongs in the spec.
+    - name: estate-intact
+      description: Nothing was deleted and the correct annotations were kept (guard)
+      type: file
+      source: validation/validate-estate-intact.sh
+      hint: Edit the files in place. Do not delete a repository ConfigMap or change annotations that are already correct.
+
+teardown:
+  keepCluster: false
