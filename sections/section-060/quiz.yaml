@@ -277,3 +277,91 @@ questions:
   correct_option: a
   explanation: By default entities of an unconfigured provider are removed. Set the
     strategy to keep to retain them.
+- id: ats071-060-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Know where provider configuration lives."
+  source_readings:
+  - sections/section-060/module-01/course-04-more-providers-and-organization-data.md
+  prompt: "Which configuration key holds the GitHub discovery providers?"
+  options:
+  - id: a
+    text: "`catalog.providers.github`"
+    explanation: "Correct."
+  - id: b
+    text: "`catalog.rules`"
+    explanation: "Rules control kinds."
+  - id: c
+    text: "`catalog.locations`"
+    explanation: "This holds static locations."
+  - id: d
+    text: "`catalog.readonly`"
+    explanation: "This blocks registration."
+  correct_option: a
+  explanation: "Each source has a block under `catalog.providers`."
+- id: ats071-060-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain the effect of renaming a provider id."
+  source_readings:
+  - sections/section-060/module-01/course-04-more-providers-and-organization-data.md
+  prompt: "A team renames the provider id in the configuration. What does a real backend see?"
+  options:
+  - id: a
+    text: "The same provider."
+    explanation: "The id names the provider."
+  - id: b
+    text: "A new provider, so the old provider no longer maintains its entities."
+    explanation: "Correct."
+  - id: c
+    text: "A syntax error."
+    explanation: "The configuration is valid."
+  - id: d
+    text: "Nothing changes."
+    explanation: "The backend tracks providers by id."
+  correct_option: b
+  explanation: "The id is the identity of the provider."
+- id: ats071-060-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Link organization data to the rules."
+  source_readings:
+  - sections/section-060/module-01/course-04-more-providers-and-organization-data.md
+  prompt: "An organization provider writes `User` and `Group` entities, and the global rules are the defaults. What happens?"
+  options:
+  - id: a
+    text: "The entities are ingested."
+    explanation: "The defaults do not allow them."
+  - id: b
+    text: "The entities are refused until the rules allow the kinds."
+    explanation: "Correct."
+  - id: c
+    text: "The entities become Components."
+    explanation: "The kind never changes."
+  - id: d
+    text: "The provider is disabled."
+    explanation: "The provider keeps running."
+  correct_option: b
+  explanation: "The default rules do not include Group or User."
+- id: ats071-060-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Handle overlapping sources."
+  source_readings:
+  - sections/section-060/module-01/course-04-more-providers-and-organization-data.md
+  prompt: "A static location and a provider both reach the file `legacy-info.yaml`. What is the best remedy?"
+  options:
+  - id: a
+    text: "Keep both and ignore the conflict."
+    explanation: "Only one claim is kept."
+  - id: b
+    text: "Give the repository one owner of its registration and remove the other."
+    explanation: "Correct."
+  - id: c
+    text: "Rename the provider."
+    explanation: "This does not remove the overlap."
+  - id: d
+    text: "Delete the entity in the interface."
+    explanation: "The source produces it again."
+  correct_option: b
+  explanation: "Overlap is a design problem. Remove one source."

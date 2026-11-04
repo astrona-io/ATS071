@@ -1,0 +1,54 @@
+# The catalog tools: two namespaces and a pod that holds the inspector.
+# catalog-source holds the descriptor "repositories" and the catalog configuration as ConfigMaps.
+# catalog-tools runs node with the real @backstage/catalog-model library installed at start.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: catalog-source
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: catalog-tools
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-tools
+  namespace: catalog-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-tools
+  template:
+    metadata:
+      labels:
+        app: catalog-tools
+    spec:
+      containers:
+        - name: node
+          image: node:22-alpine
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /opt/node && cd /opt/node
+              npm install --no-audit --no-fund --loglevel=error @backstage/catalog-model@1.10.2 yaml@2.9.1
+              touch /tmp/ready
+              exec sleep infinity
+          env:
+            - name: NODE_PATH
+              value: /opt/node/node_modules
+          readinessProbe:
+            exec:
+              command: ["test", "-f", "/tmp/ready"]
+            periodSeconds: 3
+            failureThreshold: 200
+          volumeMounts:
+            - name: inspect-script
+              mountPath: /opt/check
+      volumes:
+        - name: inspect-script
+          configMap:
+            name: inspect-script

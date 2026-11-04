@@ -216,7 +216,7 @@ questions:
   difficulty: intermediate
   learning_objective: Separate a processing failure from a service outage
   source_readings:
-  - sections/section-050/module-01/course-04-summary.md
+  - sections/section-050/module-01/course-05-summary.md
   prompt: A manager sees the error panel of the `probe` page and writes "the probe
     service is down". The error says that `spec.lifecycle` is required. What is the
     correct reading?
@@ -298,3 +298,91 @@ questions:
   correct_option: c
   explanation: Per-location rules cover only entities read from that URL. Entities
     reached through a Location entity follow the global rules.
+- id: ats071-050-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Choose the first thing to fix."
+  source_readings:
+  - sections/section-050/module-01/course-04-a-triage-routine-for-ingestion-errors.md
+  prompt: "The report has a `fetch` error and a `policy` error. Which one do you fix first?"
+  options:
+  - id: a
+    text: "The `fetch` error, because it is the earlier stage."
+    explanation: "Correct."
+  - id: b
+    text: "The `policy` error, because it is longer."
+    explanation: "Length is not a reason."
+  - id: c
+    text: "Neither, restart the backend."
+    explanation: "A restart repairs neither error."
+  - id: d
+    text: "Both at once in one edit."
+    explanation: "One fix at a time shows what changed."
+  correct_option: a
+  explanation: "Fix the earliest failing stage first."
+- id: ats071-050-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain why a new error can appear."
+  source_readings:
+  - sections/section-050/module-01/course-04-a-triage-routine-for-ingestion-errors.md
+  prompt: "After you fix a `parse` error, a `policy` error appears for the same file. Why?"
+  options:
+  - id: a
+    text: "The fix caused the policy error."
+    explanation: "The error was hidden before."
+  - id: b
+    text: "The parse error stopped the later stages, so the policy stage ran only now."
+    explanation: "Correct."
+  - id: c
+    text: "The backend is faulty."
+    explanation: "This is expected behaviour."
+  - id: d
+    text: "The location changed."
+    explanation: "The location did not change."
+  correct_option: b
+  explanation: "A failure at one stage hides the later stages for that document."
+- id: ats071-050-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick the lists that hold silent problems."
+  source_readings:
+  - sections/section-050/module-01/course-04-a-triage-routine-for-ingestion-errors.md
+  prompt: "Which parts of the report can hold a problem that has no error line?"
+  options:
+  - id: a
+    text: "`.conflicts` and `.unresolved`"
+    explanation: "Correct."
+  - id: b
+    text: "`.repos` and `.config`"
+    explanation: "These only describe the input."
+  - id: c
+    text: "`.summary.errorCount`"
+    explanation: "It counts error lines only."
+  - id: d
+    text: "`.locations[].type`"
+    explanation: "The type does not show faults."
+  correct_option: a
+  explanation: "Conflicts and unresolved relations are listed apart from errors."
+- id: ats071-050-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Group errors by stage."
+  source_readings:
+  - sections/section-050/module-01/course-04-a-triage-routine-for-ingestion-errors.md
+  prompt: "Which `jq` filter counts the errors by stage?"
+  options:
+  - id: a
+    text: "`.errors | group_by(.stage) | map({stage: .[0].stage, count: length})`"
+    explanation: "Correct."
+  - id: b
+    text: "`.errors | length`"
+    explanation: "This gives only the total."
+  - id: c
+    text: "`.entities | group_by(.kind)`"
+    explanation: "This groups entities, not errors."
+  - id: d
+    text: "`.locations | map(.status)`"
+    explanation: "This lists statuses."
+  correct_option: a
+  explanation: "group_by on `.stage` gives one group per stage."

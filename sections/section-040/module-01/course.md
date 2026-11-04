@@ -55,6 +55,8 @@ The third reading covers the life of a published entity: the parent that
 maintains it, deletion that does not last, orphans, rediscovery and
 conflicts between two declarations.
 
+The fourth reading covers the import page, the pull request path and the free choice of file names.
+
 A short summary closes the module. After the first two readings there is a
 graded lab, and a capstone lab follows the summary.
 

@@ -7,7 +7,7 @@ exam_objectives:
 
 This section covers annotations on catalog entities. An annotation is a named string in `metadata.annotations` that a plugin or processor reads to reach an external object: a repository, a documentation source, a Kubernetes workload or a link. The section explains how annotations differ from labels, tags and spec fields, which well-known keys exist, which keys the catalog writes itself, and why an annotation is metadata and never a permission.
 
-The module has three lessons and a summary, a playground, a graded lab and a capstone lab. The environment is a kind cluster. It does not run Backstage. The descriptor files are ConfigMaps, and a pod runs a checker that validates them with the real `@backstage/catalog-model` library and models locations, rules and relations.
+The module has four lessons and a summary, a playground, a graded lab and a capstone lab. The environment is a kind cluster. It does not run Backstage. The descriptor files are ConfigMaps, and a pod runs a checker that validates them with the real `@backstage/catalog-model` library and models locations, rules and relations.
 
 ## Learning Outcomes
 
@@ -17,11 +17,12 @@ The module has three lessons and a summary, a playground, a graded lab and a cap
 - Explain why authors do not write the annotations that the catalog adds.
 - Diagnose incorrect integration mappings without treating metadata as permission.
 - Repair invalid label values, non-string values, invalid keys and copied identities.
+- Write valid tags and links and use the annotations that describe source and documentation
 
 ## The Learning Path
 
 ### 1. Annotation Contracts And External Identity Mapping
-*   **Module Reader:** the landing page and three lessons, then the summary.
+*   **Module Reader:** the landing page and four lessons, then the summary.
 *   **Hands-on Playground:** `sections/section-030/module-01/playground` - Starfleet descriptors with annotations to read, add and break.
 *   **Module Lab:** `sections/section-030/module-01/labs/lab-01` - repair annotations on three Components.
 

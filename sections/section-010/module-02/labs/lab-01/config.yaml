@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix Lifecycle And Ownership (LAB). Graded against the live cluster. Fix a missing lifecycle, a wrong lifecycle value and an owner that does not exist.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-071-lab-010-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.8
+    preloadImages:
+      - node:22-alpine
+
+bootstrap:
+  init:
+    - name: seed-catalog
+      description: Start the catalog tools and create the starting descriptors, including the faults
+      type: file
+      source: bootstrap/01-seed-catalog.sh
+
+# Applied only by astrona test: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: shuttle-ingested
+      description: "The shuttle Component is ingested with the lifecycle production"
+      type: file
+      source: validation/validate-shuttle-ingested.sh
+      hint: "The report names the missing property. Add it to the spec of the shuttle Component."
+    - name: probe-deprecated
+      description: "The probe Component is marked deprecated"
+      type: file
+      source: validation/validate-probe-deprecated.sh
+      hint: "Compare the lifecycle value with the value the catalog uses for software that is being retired."
+    - name: cargo-owner-resolves
+      description: "The cargo-hauler owner is a Group that exists"
+      type: file
+      source: validation/validate-cargo-owner-resolves.sh
+      hint: "Read the unresolved relations in the report. Use a Group that the organization file declares."
+    - name: estate-intact
+      description: "Nothing was deleted and the correct entries were kept (guard)"
+      type: file
+      source: validation/validate-estate-intact.sh
+      hint: "Edit the files in place. Do not delete a repository ConfigMap or the dependency of shuttle on probe."
+
+teardown:
+  keepCluster: false

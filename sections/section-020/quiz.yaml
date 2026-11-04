@@ -280,3 +280,91 @@ questions:
   correct_option: a
   explanation: The envelope allows `apiVersion`, `kind`, `metadata`, `spec`, `relations`
     and `status` at the top level, so another field fails the entity policies.
+- id: ats071-020-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the required fields of a Group."
+  source_readings:
+  - sections/section-020/module-01/course-04-users-groups-and-organization-data.md
+  prompt: "A `Group` descriptor has `spec.type: team` and no other `spec` field. What happens?"
+  options:
+  - id: a
+    text: "It is valid, because `type` is the only required field."
+    explanation: "The children list is required too."
+  - id: b
+    text: "It fails validation, because `spec.children` is required, even when empty."
+    explanation: "Correct. A Group needs `type` and `children`."
+  - id: c
+    text: "It is valid, but the group has no name."
+    explanation: "The name comes from metadata."
+  - id: d
+    text: "It fails because a Group needs `spec.parent`."
+    explanation: "`parent` is optional."
+  correct_option: b
+  explanation: "The Group schema requires `spec.type` and `spec.children`."
+- id: ats071-020-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain why organization data needs a rule."
+  source_readings:
+  - sections/section-020/module-01/course-04-users-groups-and-organization-data.md
+  prompt: "A location holds a `Group` and the global rules are the defaults. What happens to the Group?"
+  options:
+  - id: a
+    text: "It is ingested, because every kind is allowed by default."
+    explanation: "The default list does not include Group or User."
+  - id: b
+    text: "It is refused at the stage `rules`, unless a rule allows Group for that location."
+    explanation: "Correct. A location rule can allow the kind for that file only."
+  - id: c
+    text: "It is refused at the stage `fetch`."
+    explanation: "The file was fetched."
+  - id: d
+    text: "It is ingested but hidden."
+    explanation: "The catalog has no hidden state for this."
+  correct_option: b
+  explanation: "The default rules allow Component, System, API, Resource and Location only."
+- id: ats071-020-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read a missing parent group."
+  source_readings:
+  - sections/section-020/module-01/course-04-users-groups-and-organization-data.md
+  prompt: "A Group names `parent: starfleet-command` and no such Group exists. What does the report show?"
+  options:
+  - id: a
+    text: "A validation error at the stage `kind`."
+    explanation: "Validation does not look up the parent."
+  - id: b
+    text: "A conflict for `starfleet-command`."
+    explanation: "A conflict needs two declarations."
+  - id: c
+    text: "An unresolved `childOf` relation, and the Group is still ingested."
+    explanation: "Correct."
+  - id: d
+    text: "A parse error."
+    explanation: "The YAML is valid."
+  correct_option: c
+  explanation: "A missing target leaves an unresolved relation and no error line."
+- id: ats071-020-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Choose how organization data is kept current."
+  source_readings:
+  - sections/section-020/module-01/course-04-users-groups-and-organization-data.md
+  prompt: "A company has 400 people who change teams every week. What is the sound way to populate the catalog?"
+  options:
+  - id: a
+    text: "Edit one organization file by hand for each change."
+    explanation: "This does not scale and drifts."
+  - id: b
+    text: "Use an entity provider that ingests users and groups from the identity source."
+    explanation: "Correct. A provider writes the same entities and refreshes them."
+  - id: c
+    text: "Create one Group per person."
+    explanation: "This misuses the kind."
+  - id: d
+    text: "Leave the owner field empty."
+    explanation: "Components need an owner."
+  correct_option: b
+  explanation: "A provider keeps organization data current without manual edits."

@@ -263,3 +263,311 @@ questions:
   correct_option: b
   explanation: Value is the ability to answer real questions, so tasks are the right
     measure.
+- id: ats071-010-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the fields that place a component in a system and a domain."
+  source_readings:
+  - sections/section-010/module-01/course-04-systems-domains-apis-and-resources.md
+  prompt: "Which fields place the component `bridge` in the system `navigation` and the system in the domain `fleet-ops`?"
+  options:
+  - id: a
+    text: "`spec.system` on the component and `spec.domain` on the system."
+    explanation: "Correct. Each field names the parent and produces a partOf relation."
+  - id: b
+    text: "`spec.domain` on the component and `spec.system` on the domain."
+    explanation: "The fields sit on the child, and they name the parent of that kind."
+  - id: c
+    text: "`metadata.labels.system` and `metadata.labels.domain`."
+    explanation: "Labels carry no relations."
+  - id: d
+    text: "`spec.dependsOn` on both entities."
+    explanation: "dependsOn describes a dependency, not membership."
+  correct_option: a
+  explanation: "The child names its parent: the component names its system and the system names its domain."
+- id: ats071-010-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Read which fields connect a component to an API."
+  source_readings:
+  - sections/section-010/module-01/course-04-systems-domains-apis-and-resources.md
+  prompt: "The component `scout` calls `bridge-api`. Which field of `scout` records this?"
+  options:
+  - id: a
+    text: "`spec.providesApis`"
+    explanation: "That field lists APIs that the component offers."
+  - id: b
+    text: "`spec.consumesApis`"
+    explanation: "Correct. It lists the APIs that the component calls."
+  - id: c
+    text: "`spec.owner`"
+    explanation: "The owner is a Group or a User."
+  - id: d
+    text: "`spec.system`"
+    explanation: "The system groups software and does not describe API use."
+  correct_option: b
+  explanation: "consumesApis records use of an API and produces a consumesApi relation."
+- id: ats071-010-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Write a correct dependsOn reference."
+  source_readings:
+  - sections/section-010/module-01/course-04-systems-domains-apis-and-resources.md
+  prompt: "The component `bridge` needs the resource `telemetry-db`. Which `dependsOn` entry is safest?"
+  options:
+  - id: a
+    text: "`telemetry-db`"
+    explanation: "Without a kind, the reference may be read as a component."
+  - id: b
+    text: "`resource:default/telemetry-db`"
+    explanation: "Correct. A full reference names the kind and avoids a wrong target."
+  - id: c
+    text: "`db:telemetry-db`"
+    explanation: "`db` is not an entity kind."
+  - id: d
+    text: "`https://git.starfleet.example/telemetry-db`"
+    explanation: "A dependsOn entry is an entity reference, not an address."
+  correct_option: b
+  explanation: "A dependsOn target can be a component or a resource, so the kind belongs in the reference."
+- id: ats071-010-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Tell a validation error from an unresolved relation."
+  source_readings:
+  - sections/section-010/module-01/course-04-systems-domains-apis-and-resources.md
+  prompt: "A `System` sets `domain: fleet-operations`, and no Domain has that name. What does the checker report?"
+  options:
+  - id: a
+    text: "A validation error at the stage `policy`."
+    explanation: "Validation does not look up targets."
+  - id: b
+    text: "A conflict between two locations."
+    explanation: "No second declaration exists."
+  - id: c
+    text: "The system is ingested and an unresolved `partOf` relation is listed."
+    explanation: "Correct. The reference is well formed, so only the relation is unresolved."
+  - id: d
+    text: "A fetch error for the file."
+    explanation: "The file was read without problems."
+  correct_option: c
+  explanation: "A well-formed reference to a missing entity passes validation and leaves an unresolved relation."
+- id: ats071-010-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the required fields of a component."
+  source_readings:
+  - sections/section-010/module-02/course-01-type-and-lifecycle.md
+  prompt: "A Component descriptor has `type` and `owner` but no `lifecycle`. What does the checker report?"
+  options:
+  - id: a
+    text: "The component is ingested."
+    explanation: "Lifecycle is required."
+  - id: b
+    text: "An error at the stage `kind` that names the missing property."
+    explanation: "Correct."
+  - id: c
+    text: "A fetch error."
+    explanation: "The file was read."
+  - id: d
+    text: "A conflict."
+    explanation: "No second declaration exists."
+  correct_option: b
+  explanation: "The component schema requires type, lifecycle and owner."
+- id: ats071-010-q16
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Know the common lifecycle values."
+  source_readings:
+  - sections/section-010/module-02/course-01-type-and-lifecycle.md
+  prompt: "Which three lifecycle values does the Backstage documentation name?"
+  options:
+  - id: a
+    text: "`experimental`, `production`, `deprecated`"
+    explanation: "Correct."
+  - id: b
+    text: "`dev`, `test`, `prod`"
+    explanation: "These are environments, not documented lifecycle values."
+  - id: c
+    text: "`new`, `old`, `retired`"
+    explanation: "These are not documented values."
+  - id: d
+    text: "`alpha`, `beta`, `stable`"
+    explanation: "These describe API versions."
+  correct_option: a
+  explanation: "The documented values are experimental, production and deprecated."
+- id: ats071-010-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Explain why free lifecycle strings cost."
+  source_readings:
+  - sections/section-010/module-02/course-01-type-and-lifecycle.md
+  prompt: "A component has the lifecycle `prod`. What happens?"
+  options:
+  - id: a
+    text: "It fails validation."
+    explanation: "Any string is valid."
+  - id: b
+    text: "It is ingested, and a filter for `production` misses it."
+    explanation: "Correct."
+  - id: c
+    text: "The catalog rewrites it to `production`."
+    explanation: "The catalog never rewrites values."
+  - id: d
+    text: "The catalog marks it deprecated."
+    explanation: "The catalog does not infer this."
+  correct_option: b
+  explanation: "The catalog checks presence, not meaning."
+- id: ats071-010-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Say which field the owner filter reads."
+  source_readings:
+  - sections/section-010/module-02/course-02-filtering-the-catalog.md
+  prompt: "Which data does the owner filter of the catalog read?"
+  options:
+  - id: a
+    text: "The `ownedBy` relation derived from `spec.owner`."
+    explanation: "Correct. Every spelling of the owner matches."
+  - id: b
+    text: "The text of `metadata.name`."
+    explanation: "The name is not the owner."
+  - id: c
+    text: "The annotation `backstage.io/owner`."
+    explanation: "No such annotation is used."
+  - id: d
+    text: "The label `owner`."
+    explanation: "Labels are not used."
+  correct_option: a
+  explanation: "The filter uses the relation, so full and short references match."
+- id: ats071-010-q19
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Predict a tag filter result."
+  source_readings:
+  - sections/section-010/module-02/course-02-filtering-the-catalog.md
+  prompt: "A component has no `metadata.tags`. Does it appear in a filter for the tag `cargo`?"
+  options:
+  - id: a
+    text: "Yes, an empty list matches all tags."
+    explanation: "An empty list matches nothing."
+  - id: b
+    text: "No, it is not in the result."
+    explanation: "Correct."
+  - id: c
+    text: "Yes, but at the end of the list."
+    explanation: "Filters do not rank."
+  - id: d
+    text: "The filter reports an error."
+    explanation: "A missing field gives an empty result, not an error."
+  correct_option: b
+  explanation: "A filter selects entities that carry the value."
+- id: ats071-010-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Combine filters."
+  source_readings:
+  - sections/section-010/module-02/course-02-filtering-the-catalog.md
+  prompt: "What does the interface do when you set the owner filter and the lifecycle filter together?"
+  options:
+  - id: a
+    text: "Shows entities that match either filter."
+    explanation: "Filters narrow the list."
+  - id: b
+    text: "Shows entities that match both filters."
+    explanation: "Correct."
+  - id: c
+    text: "Ignores the second filter."
+    explanation: "Both apply."
+  - id: d
+    text: "Shows only deprecated entities."
+    explanation: "The lifecycle filter selects the value you set."
+  correct_option: b
+  explanation: "Filters combine with a logical and."
+- id: ats071-010-q21
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Know what deprecated does."
+  source_readings:
+  - sections/section-010/module-02/course-03-deprecation-and-impact.md
+  prompt: "What does the lifecycle `deprecated` do?"
+  options:
+  - id: a
+    text: "Removes the component from the catalog."
+    explanation: "It only signals."
+  - id: b
+    text: "Blocks new `dependsOn` references."
+    explanation: "The catalog does not block dependencies."
+  - id: c
+    text: "Tells readers to stop starting new uses."
+    explanation: "Correct."
+  - id: d
+    text: "Deletes the registration."
+    explanation: "Registrations stay."
+  correct_option: c
+  explanation: "Deprecated is a signal for people."
+- id: ats071-010-q22
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Find dependents."
+  source_readings:
+  - sections/section-010/module-02/course-03-deprecation-and-impact.md
+  prompt: "How do you find the dependents of the component `probe`?"
+  options:
+  - id: a
+    text: "Search for entities whose `dependsOn` names `component:default/probe`."
+    explanation: "Correct. The catalog also stores the reverse `dependencyOf` relation."
+  - id: b
+    text: "Read the owner of `probe`."
+    explanation: "The owner is not a dependent."
+  - id: c
+    text: "Read the tags of `probe`."
+    explanation: "Tags do not list dependents."
+  - id: d
+    text: "Read its lifecycle."
+    explanation: "The lifecycle lists no dependents."
+  correct_option: a
+  explanation: "Dependents are the entities that name it in dependsOn."
+- id: ats071-010-q23
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Predict the effect of a removal."
+  source_readings:
+  - sections/section-010/module-02/course-03-deprecation-and-impact.md
+  prompt: "The registration of `probe` is removed while `shuttle` still depends on it. What does the report show?"
+  options:
+  - id: a
+    text: "A validation error for `shuttle`."
+    explanation: "The reference is well formed."
+  - id: b
+    text: "An unresolved `dependsOn` relation from `shuttle`."
+    explanation: "Correct."
+  - id: c
+    text: "A conflict for `probe`."
+    explanation: "No second declaration exists."
+  - id: d
+    text: "Nothing."
+    explanation: "The relation points at nothing and is listed."
+  correct_option: b
+  explanation: "Missing targets leave unresolved relations."
+- id: ats071-010-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick audit checks."
+  source_readings:
+  - sections/section-010/module-02/course-04-auditing-catalog-quality.md
+  prompt: "Which gap does the catalog accept without any error?"
+  options:
+  - id: a
+    text: "A component without `lifecycle`."
+    explanation: "This fails validation."
+  - id: b
+    text: "A component without a description."
+    explanation: "Correct. Descriptions are optional."
+  - id: c
+    text: "A component without a name."
+    explanation: "This fails validation."
+  - id: d
+    text: "A component with a broken YAML file."
+    explanation: "This gives a parse error."
+  correct_option: b
+  explanation: "Optional fields can stay empty and weaken the catalog."

@@ -16,6 +16,7 @@ The hands-on parts use a kind cluster. The descriptor files are ConfigMaps, and 
 - Explain processing errors without confusing them with service outages.
 - Tell a fetch failure from a parse failure, a validation failure, a rules refusal, an unresolved relation and a conflict.
 - Repair each fault in the descriptor or the configuration that causes it.
+- Triage ingestion errors in the order of the processing stages
 
 ## The Learning Path
 

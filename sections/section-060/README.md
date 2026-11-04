@@ -16,14 +16,15 @@ The hands-on work runs in a kind cluster. It does not run Backstage. A pod runs 
 - Reason about scheduling, full and incremental updates.
 - Identify ownership, filtering and credential risks in automated discovery.
 - Find and remove a duplicate between a provider and a static location.
+- Choose providers per source, handle organization data and avoid overlapping sources
 
 ## Learning Path
 
 | Step | Content | Path |
 | --- | --- | --- |
-| 1 | Landing page and three lessons | `module-01/course.md` and `module-01/course-0N-*.md` |
+| 1 | Landing page and four lessons | `module-01/course.md` and `module-01/course-0N-*.md` |
 | 2 | Playground | `module-01/playground` (`ats-071-playground-060-01`) |
 | 3 | Module lab: fix GitHub discovery filters | `module-01/labs/lab-01` (`ats-071-lab-060-01`) |
-| 4 | Summary | `module-01/course-04-summary.md` |
+| 4 | Summary | `module-01/course-05-summary.md` |
 | 5 | Capstone lab: finish a provider migration | `capstone/labs/lab-01` (`ats-071-capstone-060`) |
 | 6 | Knowledge check | `quiz.yaml` |

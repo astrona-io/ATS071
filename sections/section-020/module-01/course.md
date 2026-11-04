@@ -15,7 +15,7 @@ The module separates these causes into steps. Each step has its own evidence in 
 
 ## What you will learn
 
-The module has three teaching chapters and a summary.
+The module has four teaching chapters and a summary. The fourth chapter covers the `Group` and `User` kinds, the required fields of each and the way organization data enters the catalog.
 
 The first chapter covers the descriptor envelope: `apiVersion`, `kind`, `metadata` and `spec`. It explains the format rules for names, namespaces, labels, annotations and tags, and it shows which part of the catalog model enforces them. These checks are the entity policies.
 

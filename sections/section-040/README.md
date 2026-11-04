@@ -17,11 +17,12 @@ The reading pages, the playground and the labs use a model of the catalog backen
 - Register a location in the static configuration and read its status.
 - Resolve the targets of a `Location` entity and choose between a rule on one location and the global rules.
 - Retire software at its source and find duplicate declarations of one entity.
+- Explain the import flow, the pull request path and the free choice of descriptor file names
 
 ## The Learning Path
 
 ### 1. Registered Locations, Source Access And Entity Lifecycle
-*   **Module Reader:** `module-01/course.md`, with three deep-dive readings and a summary.
+*   **Module Reader:** `module-01/course.md`, with four deep-dive readings and a summary.
 *   **Hands-on Playground:** `sections/section-040/module-01/playground` - a kind cluster with a Starfleet estate that has static locations, a `Location` entity, a per-location rule and a retired repository.
 *   **Module Lab:** `sections/section-040/module-01/labs/lab-01` - fix a wrong branch, a blocked kind, a mistyped target and a retired registration.
 

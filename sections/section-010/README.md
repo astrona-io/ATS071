@@ -17,6 +17,7 @@ The Backstage software catalog describes software and the people who own it as e
 - Declare owners and read the relations the catalog derives
 - Find and fix unresolved references
 - Explain source of truth, freshness and adoption
+- Group software into systems and domains and connect components through APIs and dependencies
 
 ---
 
@@ -26,6 +27,11 @@ The Backstage software catalog describes software and the people who own it as e
 *   **Module Reader:** **[Module 1](./module-01/course.md)**
 *   **Hands-on Playground:** `sections/section-010/module-01/playground` - a kind cluster with a checker pod and a small Starfleet estate.
 *   **Module Lab:** `sections/section-010/module-01/labs/lab-01` - make owners and relations resolve.
+
+### 2. Describing And Finding Software
+*   **Module Reader:** **[Module 2](./module-02/course.md)**
+*   **Hands-on Playground:** `sections/section-010/module-02/playground` - a kind cluster with components of several lifecycles, types and tags.
+*   **Module Lab:** `sections/section-010/module-02/labs/lab-01` - fix a lifecycle, a deprecation and an owner.
 
 ### Capstone
 *   **Capstone Lab:** `sections/section-010/capstone/labs/lab-01` - model a small estate from scratch.

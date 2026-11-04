@@ -72,9 +72,9 @@ These parts of the report are used throughout the module:
 
 ## How the Module Is Organised
 
-The module has three lessons, a summary, a graded lab and a capstone lab with a quiz at the end.
+The module has four lessons, a summary, a graded lab and a capstone lab with a quiz at the end.
 
-The first lesson explains providers and processors and reads a provider configuration. The second lesson explains the filters and the credential that sit behind them, and ends with a graded lab in which you repair a provider. The third lesson covers the schedule, full and delta updates and duplicate sources. The summary closes the module. The capstone combines everything in one estate.
+The first lesson explains providers and processors and reads a provider configuration. The second lesson explains the filters and the credential that sit behind them, and ends with a graded lab in which you repair a provider. The third lesson covers the schedule, full and delta updates and duplicate sources. The fourth lesson covers other providers, organization data and two providers that reach the same repository. The summary closes the module. The capstone combines everything in one estate.
 
 ## How to Work Through a Lesson
 

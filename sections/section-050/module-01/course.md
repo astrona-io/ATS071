@@ -58,7 +58,7 @@ Every command in the module is a `kubectl` command or a `jq` filter on the repor
 
 ## What You Will Do
 
-The reading has three lessons and a summary. Each lesson has a hands-on section in the playground. A lab follows the last lesson, and a capstone lab closes the section.
+The reading has four lessons and a summary. The fourth lesson gives a triage routine that reads the errors in the order of the stages. Each lesson has a hands-on section in the playground. A lab follows the last lesson, and a capstone lab closes the section.
 
 1. The steps from a file to a published entity, and where each failure leaves evidence.
 2. Fetch failures and parse failures: the location status, the branch and path of a target, and YAML mistakes.

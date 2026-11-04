@@ -28,13 +28,15 @@ The reader should know that a descriptor is a YAML file with `apiVersion`, `kind
 
 ## The order of the lessons
 
-The module has three lessons and a summary, read in this order.
+The module has four lessons and a summary, read in this order.
 
 The first lesson defines an annotation and follows a value from the descriptor to an external system. It shows that the catalog stores a string and checks only its format, and it uses the playground to find a component whose annotations name another component. The lesson also explains why an annotation grants no access.
 
 The second lesson compares the four places for extra information: labels, annotations, tags and spec fields. It gives the key and value rules of each place and shows three failures in the checker: a label value that contains a colon, an annotation value that is not a string, and a required spec field that was written as an annotation.
 
 The third lesson lists the well-known annotation keys, the value format of each key, and the two keys that the catalog backend writes itself. It ends with a repair of a descriptor that holds the values of another component.
+
+The fourth lesson covers tags, links and the annotations that describe the source and the documentation, and shows which values the validator refuses.
 
 The summary closes the module with the facts to remember.
 

@@ -299,3 +299,91 @@ questions:
   correct_option: d
   explanation: An entity reference is unique. Decide which source owns the entity
     and remove the other declaration.
+- id: ats071-040-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Describe the two paths of the import page."
+  source_readings:
+  - sections/section-040/module-01/course-04-the-import-flow-and-file-names.md
+  prompt: "A person pastes the address of a repository that has no descriptor. What can the import plugin offer?"
+  options:
+  - id: a
+    text: "Delete the repository."
+    explanation: "The plugin does not do this."
+  - id: b
+    text: "Open a pull request that adds a descriptor file, then register the location."
+    explanation: "Correct. This needs write access for the integration."
+  - id: c
+    text: "Register the repository without a file."
+    explanation: "A location needs a file."
+  - id: d
+    text: "Change the rules."
+    explanation: "The plugin does not change the rules."
+  correct_option: b
+  explanation: "The plugin can propose a descriptor through a pull request."
+- id: ats071-040-q12
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Name the default file name of the import."
+  source_readings:
+  - sections/section-040/module-01/course-04-the-import-flow-and-file-names.md
+  prompt: "Which setting changes the file name that the import plugin proposes?"
+  options:
+  - id: a
+    text: "`catalog.import.entityFilename`"
+    explanation: "Correct. The default is `catalog-info.yaml`."
+  - id: b
+    text: "`catalog.rules`"
+    explanation: "Rules control kinds."
+  - id: c
+    text: "`catalog.orphanStrategy`"
+    explanation: "This controls orphans."
+  - id: d
+    text: "`catalog.readonly`"
+    explanation: "This blocks registration."
+  correct_option: a
+  explanation: "The key `catalog.import.entityFilename` sets the proposed file name."
+- id: ats071-040-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Know that a location file name is free."
+  source_readings:
+  - sections/section-040/module-01/course-04-the-import-flow-and-file-names.md
+  prompt: "A location points at `service.yaml` and not at `catalog-info.yaml`. What follows?"
+  options:
+  - id: a
+    text: "The location is refused."
+    explanation: "Any file name can be fetched."
+  - id: b
+    text: "The location works if the reader can fetch the file."
+    explanation: "Correct."
+  - id: c
+    text: "The catalog renames the file."
+    explanation: "The catalog never renames files."
+  - id: d
+    text: "Only components are allowed."
+    explanation: "The rules decide the kinds."
+  correct_option: b
+  explanation: "The file name `catalog-info.yaml` is a default, not a requirement."
+- id: ats071-040-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Diagnose a not found status."
+  source_readings:
+  - sections/section-040/module-01/course-04-the-import-flow-and-file-names.md
+  prompt: "The file `service.yaml` exists in the repository, but its location has the status `not-found`. What is the likely cause?"
+  options:
+  - id: a
+    text: "The branch in the address is not the default branch."
+    explanation: "Correct. The branch is part of the address."
+  - id: b
+    text: "The entity name is invalid."
+    explanation: "This would be a validation error."
+  - id: c
+    text: "A global rule refused the kind."
+    explanation: "This would be a rules error."
+  - id: d
+    text: "The YAML has a syntax error."
+    explanation: "This would be a parse error."
+  correct_option: a
+  explanation: "A wrong branch gives a fetch error with a not found message."

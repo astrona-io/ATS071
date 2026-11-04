@@ -30,6 +30,7 @@ You need `kubectl`, `jq` and the `astrona` command. You do not need to know Back
 1. Entities, kinds and entity references: what an entity is and how it is named.
 2. Ownership and relations: how `owner`, `system`, `providesApis`, `consumesApis` and `dependsOn` become relations, and what unresolved means.
 3. Source of truth, freshness and adoption: who owns each piece of data, how data goes stale and how to judge value.
-4. Summary.
+4. Systems, domains, APIs and resources: how systems and domains group software and how API and dependency fields connect components.
+5. Summary.
 
 <!-- astrona:playground -->

@@ -373,7 +373,7 @@ questions:
     difficulty: advanced
     learning_objective: Repair a failed ingestion at the source of truth
     source_readings:
-    - sections/section-050/module-01/course-04-summary.md
+    - sections/section-050/module-01/course-05-summary.md
     prompt: A rejected descriptor has a wrong `spec.lifecycle` value. A colleague suggests
       editing the published entity through a tool so that the page looks right. What
       is the correct approach?
@@ -470,3 +470,135 @@ questions:
     correct_option: b
     explanation: The branch filter excluded all repositories, so the provider produced
       no location.
+  - id: ats071-final-s010-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write a correct dependsOn reference."
+    source_readings:
+    - sections/section-010/module-01/course-04-systems-domains-apis-and-resources.md
+    prompt: "The component `bridge` needs the resource `telemetry-db`. Which `dependsOn` entry is safest?"
+    options:
+    - id: a
+      text: "`telemetry-db`"
+      explanation: "Without a kind, the reference may be read as a component."
+    - id: b
+      text: "`resource:default/telemetry-db`"
+      explanation: "Correct. A full reference names the kind and avoids a wrong target."
+    - id: c
+      text: "`db:telemetry-db`"
+      explanation: "`db` is not an entity kind."
+    - id: d
+      text: "`https://git.starfleet.example/telemetry-db`"
+      explanation: "A dependsOn entry is an entity reference, not an address."
+    correct_option: b
+    explanation: "A dependsOn target can be a component or a resource, so the kind belongs in the reference."
+  - id: ats071-final-s020-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a missing parent group."
+    source_readings:
+    - sections/section-020/module-01/course-04-users-groups-and-organization-data.md
+    prompt: "A Group names `parent: starfleet-command` and no such Group exists. What does the report show?"
+    options:
+    - id: a
+      text: "A validation error at the stage `kind`."
+      explanation: "Validation does not look up the parent."
+    - id: b
+      text: "A conflict for `starfleet-command`."
+      explanation: "A conflict needs two declarations."
+    - id: c
+      text: "An unresolved `childOf` relation, and the Group is still ingested."
+      explanation: "Correct."
+    - id: d
+      text: "A parse error."
+      explanation: "The YAML is valid."
+    correct_option: c
+    explanation: "A missing target leaves an unresolved relation and no error line."
+  - id: ats071-final-s030-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the annotation that points at the source code."
+    source_readings:
+    - sections/section-030/module-01/course-04-tags-links-and-source-annotations.md
+    prompt: "Which annotation tells plugins where the source code folder of a component is?"
+    options:
+    - id: a
+      text: "`backstage.io/techdocs-ref`"
+      explanation: "This one points at the documentation source."
+    - id: b
+      text: "`backstage.io/managed-by-location`"
+      explanation: "The catalog writes this key, and it names the descriptor location."
+    - id: c
+      text: "`backstage.io/source-location`"
+      explanation: "Correct. Its value starts with `url:`."
+    - id: d
+      text: "`backstage.io/orphan`"
+      explanation: "This key marks an orphan."
+    correct_option: c
+    explanation: "`backstage.io/source-location` names the folder of the source code."
+  - id: ats071-final-s040-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know that a location file name is free."
+    source_readings:
+    - sections/section-040/module-01/course-04-the-import-flow-and-file-names.md
+    prompt: "A location points at `service.yaml` and not at `catalog-info.yaml`. What follows?"
+    options:
+    - id: a
+      text: "The location is refused."
+      explanation: "Any file name can be fetched."
+    - id: b
+      text: "The location works if the reader can fetch the file."
+      explanation: "Correct."
+    - id: c
+      text: "The catalog renames the file."
+      explanation: "The catalog never renames files."
+    - id: d
+      text: "Only components are allowed."
+      explanation: "The rules decide the kinds."
+    correct_option: b
+    explanation: "The file name `catalog-info.yaml` is a default, not a requirement."
+  - id: ats071-final-s050-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick the lists that hold silent problems."
+    source_readings:
+    - sections/section-050/module-01/course-04-a-triage-routine-for-ingestion-errors.md
+    prompt: "Which parts of the report can hold a problem that has no error line?"
+    options:
+    - id: a
+      text: "`.conflicts` and `.unresolved`"
+      explanation: "Correct."
+    - id: b
+      text: "`.repos` and `.config`"
+      explanation: "These only describe the input."
+    - id: c
+      text: "`.summary.errorCount`"
+      explanation: "It counts error lines only."
+    - id: d
+      text: "`.locations[].type`"
+      explanation: "The type does not show faults."
+    correct_option: a
+    explanation: "Conflicts and unresolved relations are listed apart from errors."
+  - id: ats071-final-s060-q4
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the effect of renaming a provider id."
+    source_readings:
+    - sections/section-060/module-01/course-04-more-providers-and-organization-data.md
+    prompt: "A team renames the provider id in the configuration. What does a real backend see?"
+    options:
+    - id: a
+      text: "The same provider."
+      explanation: "The id names the provider."
+    - id: b
+      text: "A new provider, so the old provider no longer maintains its entities."
+      explanation: "Correct."
+    - id: c
+      text: "A syntax error."
+      explanation: "The configuration is valid."
+    - id: d
+      text: "Nothing changes."
+      explanation: "The backend tracks providers by id."
+    correct_option: b
+    explanation: "The id is the identity of the provider."

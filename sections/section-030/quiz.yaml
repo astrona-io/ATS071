@@ -285,3 +285,91 @@ questions:
       entity.
   correct_option: c
   explanation: Annotation keys follow the same format as labels.
+- id: ats071-030-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Recognise a valid tag."
+  source_readings:
+  - sections/section-030/module-01/course-04-tags-links-and-source-annotations.md
+  prompt: "Which tag does the validator accept?"
+  options:
+  - id: a
+    text: "`Experimental`"
+    explanation: "Uppercase letters are not allowed."
+  - id: b
+    text: "`cargo hauler`"
+    explanation: "Spaces are not allowed."
+  - id: c
+    text: "`cargo-hauler`"
+    explanation: "Correct. Lowercase letters, digits and single dashes are allowed."
+  - id: d
+    text: "`cargo--hauler`"
+    explanation: "Double dashes are not allowed."
+  correct_option: c
+  explanation: "A tag uses lowercase letters, digits, `+`, `#` and single dashes, up to 63 characters."
+- id: ats071-030-q12
+  type: single_choice
+  difficulty: beginner
+  learning_objective: "Know the required field of a link."
+  source_readings:
+  - sections/section-030/module-01/course-04-tags-links-and-source-annotations.md
+  prompt: "An item of `metadata.links` has a `title` and an `icon` and no other field. What happens?"
+  options:
+  - id: a
+    text: "It is valid, because `url` is optional."
+    explanation: "The `url` field is required."
+  - id: b
+    text: "It fails validation, because `url` is required."
+    explanation: "Correct."
+  - id: c
+    text: "It is valid and the link is hidden."
+    explanation: "The validator refuses it."
+  - id: d
+    text: "It fails at the stage `rules`."
+    explanation: "Rules cover kinds, not fields."
+  correct_option: b
+  explanation: "The `url` field of a link is required."
+- id: ats071-030-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: "Pick the annotation that points at the source code."
+  source_readings:
+  - sections/section-030/module-01/course-04-tags-links-and-source-annotations.md
+  prompt: "Which annotation tells plugins where the source code folder of a component is?"
+  options:
+  - id: a
+    text: "`backstage.io/techdocs-ref`"
+    explanation: "This one points at the documentation source."
+  - id: b
+    text: "`backstage.io/managed-by-location`"
+    explanation: "The catalog writes this key, and it names the descriptor location."
+  - id: c
+    text: "`backstage.io/source-location`"
+    explanation: "Correct. Its value starts with `url:`."
+  - id: d
+    text: "`backstage.io/orphan`"
+    explanation: "This key marks an orphan."
+  correct_option: c
+  explanation: "`backstage.io/source-location` names the folder of the source code."
+- id: ats071-030-q14
+  type: single_choice
+  difficulty: advanced
+  learning_objective: "Read how policies report errors."
+  source_readings:
+  - sections/section-030/module-01/course-04-tags-links-and-source-annotations.md
+  prompt: "A descriptor has a link without `url` and a tag with an uppercase letter. What does the checker show after the first run?"
+  options:
+  - id: a
+    text: "Both errors at once."
+    explanation: "The policies stop at the first failure."
+  - id: b
+    text: "Only the first failing check, and the second one after you fix the first."
+    explanation: "Correct."
+  - id: c
+    text: "No error, because both are warnings."
+    explanation: "Both fields fail validation."
+  - id: d
+    text: "A fetch error."
+    explanation: "The file was fetched."
+  correct_option: b
+  explanation: "The entity policies run in order and stop at the first failure."

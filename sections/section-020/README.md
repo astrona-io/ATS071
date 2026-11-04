@@ -19,6 +19,7 @@ Every entity in a Backstage catalog starts as a descriptor, a YAML file in a rep
 - Explain location registration and processing as separate steps.
 - Distinguish valid YAML, valid entities and kinds that the catalog rules allow.
 - Fix `catalog.rules` and register a location without opening the catalog too far.
+- Describe teams and people with Group and User entities and let a location rule admit them
 
 ---
 
