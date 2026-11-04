@@ -5,7 +5,7 @@ kind: question_bank
 id: ats071-010
 course_id: ATS071
 exam_code: CBA
-status: draft
+status: alpha
 provenance: Original practice material written for this course; not official exam
   questions.
 scope:
