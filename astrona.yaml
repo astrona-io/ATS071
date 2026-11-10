@@ -199,7 +199,7 @@ modules:
     difficulty: advanced
     estimated_duration: 30m
     topic: catalog-population
-    task_kind: configuration
+    task_kind: troubleshooting
     tags:
     - backstage
     - catalog
@@ -464,7 +464,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 20m
     topic: automated-ingestion
-    task_kind: configuration
+    task_kind: troubleshooting
     tags:
     - github-discovery
     - entity-provider
